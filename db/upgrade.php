@@ -42,7 +42,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_forum_upgrade($oldversion) {
+function xmldb_communityforum_upgrade($oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.

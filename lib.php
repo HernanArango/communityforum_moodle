@@ -142,7 +142,7 @@ function communityforum_add_instance($forum, $mform = null) {
  * @return void
  */
 function communityforum_instance_created($context, $forum) {
-    if ($forum->forcesubscribe == communityforum_INITIALSUBSCRIBE) {
+    if ($forum->forcesubscribe == COMMUNITYFORUM_INITIALSUBSCRIBE) {
         $users = \mod_forum\subscriptions::get_potential_subscribers($context, 0, 'u.id, u.email');
         foreach ($users as $user) {
             \mod_forum\subscriptions::subscribe_user($user->id, $forum, $context);
@@ -240,7 +240,7 @@ function communityforum_update_instance($forum, $mform) {
     $DB->update_record('forum', $forum);
 
     $modcontext = context_module::instance($forum->coursemodule);
-    if (($forum->forcesubscribe == communityforum_INITIALSUBSCRIBE) && ($oldforum->forcesubscribe <> $forum->forcesubscribe)) {
+    if (($forum->forcesubscribe == COMMUNITYFORUM_INITIALSUBSCRIBE) && ($oldforum->forcesubscribe <> $forum->forcesubscribe)) {
         $users = \mod_forum\subscriptions::get_potential_subscribers($modcontext, 0, 'u.id, u.email', '');
         foreach ($users as $user) {
             \mod_forum\subscriptions::subscribe_user($user->id, $forum, $modcontext);
@@ -572,7 +572,7 @@ function communityforum_cron() {
                         // this user is subscribed to this forum
                         $subscribedusers[$forumid][$postuser->id] = $postuser->id;
                         $userscount++;
-                        if ($userscount > communityforum_CRON_USER_CACHE) {
+                        if ($userscount > COMMUNITYFORUM_CRON_USER_CACHE) {
                             // Store minimal user info.
                             $minuser = new stdClass();
                             $minuser->id = $postuser->id;
@@ -669,7 +669,7 @@ function communityforum_cron() {
                 } else if ($userfrom = $DB->get_record('user', array('id' => $post->userid))) {
                     communityforum_cron_minimise_user_record($userfrom);
                     // Fetch only once if possible, we can add it to user list, it will be skipped anyway.
-                    if ($userscount <= communityforum_CRON_USER_CACHE) {
+                    if ($userscount <= COMMUNITYFORUM_CRON_USER_CACHE) {
                         $userscount++;
                         $users[$userfrom->id] = $userfrom;
                     }
@@ -896,7 +896,7 @@ function communityforum_cron() {
         foreach ($posts as $post) {
             mtrace($mailcount[$post->id]." users were sent post $post->id, '$post->subject'");
             if ($errorcount[$post->id]) {
-                $DB->set_field('communityforum_posts', 'mailed', communityforum_MAILED_ERROR, array('id' => $post->id));
+                $DB->set_field('communityforum_posts', 'mailed', COMMUNITYFORUM_MAILED_ERROR, array('id' => $post->id));
             }
         }
     }
@@ -7163,28 +7163,28 @@ function communityforum_extend_settings_navigation(settings_navigation $settings
         $mode = $forumnode->add(get_string('subscriptionmode', 'forum'), null, navigation_node::TYPE_CONTAINER);
         $mode->add_class('subscriptionmode');
 
-        $allowchoice = $mode->add(get_string('subscriptionoptional', 'forum'), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>communityforum_CHOOSESUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
-        $forceforever = $mode->add(get_string("subscriptionforced", "forum"), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>communityforum_FORCESUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
-        $forceinitially = $mode->add(get_string("subscriptionauto", "forum"), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>communityforum_INITIALSUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
-        $disallowchoice = $mode->add(get_string('subscriptiondisabled', 'forum'), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>communityforum_DISALLOWSUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
+        $allowchoice = $mode->add(get_string('subscriptionoptional', 'forum'), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>COMMUNITYFORUM_CHOOSESUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
+        $forceforever = $mode->add(get_string("subscriptionforced", "forum"), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>COMMUNITYFORUM_FORCESUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
+        $forceinitially = $mode->add(get_string("subscriptionauto", "forum"), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>COMMUNITYFORUM_INITIALSUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
+        $disallowchoice = $mode->add(get_string('subscriptiondisabled', 'forum'), new moodle_url('/mod/forum/subscribe.php', array('id'=>$forumobject->id, 'mode'=>COMMUNITYFORUM_DISALLOWSUBSCRIBE, 'sesskey'=>sesskey())), navigation_node::TYPE_SETTING);
 
         switch ($subscriptionmode) {
-            case communityforum_CHOOSESUBSCRIBE : // 0
+            case COMMUNITYFORUM_CHOOSESUBSCRIBE : // 0
                 $allowchoice->action = null;
                 $allowchoice->add_class('activesetting');
                 $allowchoice->icon = new pix_icon('t/selected', '', 'mod_forum');
                 break;
-            case communityforum_FORCESUBSCRIBE : // 1
+            case COMMUNITYFORUM_FORCESUBSCRIBE : // 1
                 $forceforever->action = null;
                 $forceforever->add_class('activesetting');
                 $forceforever->icon = new pix_icon('t/selected', '', 'mod_forum');
                 break;
-            case communityforum_INITIALSUBSCRIBE : // 2
+            case COMMUNITYFORUM_INITIALSUBSCRIBE : // 2
                 $forceinitially->action = null;
                 $forceinitially->add_class('activesetting');
                 $forceinitially->icon = new pix_icon('t/selected', '', 'mod_forum');
                 break;
-            case communityforum_DISALLOWSUBSCRIBE : // 3
+            case COMMUNITYFORUM_DISALLOWSUBSCRIBE : // 3
                 $disallowchoice->action = null;
                 $disallowchoice->add_class('activesetting');
                 $disallowchoice->icon = new pix_icon('t/selected', '', 'mod_forum');
@@ -7194,16 +7194,16 @@ function communityforum_extend_settings_navigation(settings_navigation $settings
     } else if ($activeenrolled) {
 
         switch ($subscriptionmode) {
-            case communityforum_CHOOSESUBSCRIBE : // 0
+            case COMMUNITYFORUM_CHOOSESUBSCRIBE : // 0
                 $notenode = $forumnode->add(get_string('subscriptionoptional', 'forum'));
                 break;
-            case communityforum_FORCESUBSCRIBE : // 1
+            case COMMUNITYFORUM_FORCESUBSCRIBE : // 1
                 $notenode = $forumnode->add(get_string('subscriptionforced', 'forum'));
                 break;
-            case communityforum_INITIALSUBSCRIBE : // 2
+            case COMMUNITYFORUM_INITIALSUBSCRIBE : // 2
                 $notenode = $forumnode->add(get_string('subscriptionauto', 'forum'));
                 break;
-            case communityforum_DISALLOWSUBSCRIBE : // 3
+            case COMMUNITYFORUM_DISALLOWSUBSCRIBE : // 3
                 $notenode = $forumnode->add(get_string('subscriptiondisabled', 'forum'));
                 break;
         }
@@ -7240,8 +7240,8 @@ function communityforum_extend_settings_navigation(settings_navigation $settings
     }
 
     if ($enrolled && communityforum_tp_can_track_forums($forumobject)) { // keep tracking info for users with suspended enrolments
-        if ($forumobject->trackingtype == communityforum_TRACKING_OPTIONAL
-                || ((!$CFG->communityforum_allowforcedreadtracking) && $forumobject->trackingtype == communityforum_TRACKING_FORCED)) {
+        if ($forumobject->trackingtype == COMMUNITYFORUM_TRACKING_OPTIONAL
+                || ((!$CFG->communityforum_allowforcedreadtracking) && $forumobject->trackingtype == COMMUNITYFORUM_TRACKING_FORCED)) {
             if (communityforum_tp_is_tracked($forumobject)) {
                 $linktext = get_string('notrackforum', 'forum');
             } else {
