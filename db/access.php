@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
-    /*'mod/communityforum:addinstance' => array(
+    'mod/communityforum:addinstance' => array(
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
@@ -36,7 +36,7 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         ),
         'clonepermissionsfrom' => 'moodle/course:manageactivities'
-    ),*/
+    ),
 
     'mod/communityforum:viewdiscussion' => array(
 
