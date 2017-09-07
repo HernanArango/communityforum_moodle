@@ -17,7 +17,7 @@
 /**
  * Event observers used in forum.
  *
- * @package    mod_forum
+ * @package    mod_communityforum
  * @copyright  2013 Rajesh Taneja <rajesh@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Event observer for mod_forum.
+ * Event observer for mod_communityforum.
  */
-class mod_forum_observer {
+class mod_communityforum_observer {
 
     /**
      * Triggered via user_enrolment_deleted event.
@@ -41,7 +41,7 @@ class mod_forum_observer {
         // Get user enrolment info from event.
         $cp = (object)$event->other['userenrolment'];
         if ($cp->lastenrol) {
-            if (!$forums = $DB->get_records('forum', array('course' => $cp->courseid), '', 'id')) {
+            if (!$forums = $DB->get_records('communityforum', array('course' => $cp->courseid), '', 'id')) {
                 return;
             }
             list($forumselect, $params) = $DB->get_in_or_equal(array_keys($forums), SQL_PARAMS_NAMED);
@@ -72,7 +72,7 @@ class mod_forum_observer {
         }
 
         // Forum lib required for the constant used below.
-        require_once($CFG->dirroot . '/mod/forum/lib.php');
+        require_once($CFG->dirroot . '/mod/communityforum/lib.php');
 
         $userid = $event->relateduserid;
         $sql = "SELECT f.id, f.course as course, cm.id AS cmid, f.forcesubscribe
@@ -90,7 +90,7 @@ class mod_forum_observer {
         foreach ($forums as $forum) {
             // If user doesn't have allowforcesubscribe capability then don't subscribe.
             $modcontext = context_module::instance($forum->cmid);
-            if (has_capability('mod/forum:allowforcesubscribe', $modcontext, $userid)) {
+            if (has_capability('mod/communityforum:allowforcesubscribe', $modcontext, $userid)) {
                 \mod_forum\subscriptions::subscribe_user($userid, $forum, $modcontext);
             }
         }
@@ -107,9 +107,9 @@ class mod_forum_observer {
 
         if ($event->other['modulename'] === 'forum') {
             // Include the forum library to make use of the forum_instance_created function.
-            require_once($CFG->dirroot . '/mod/forum/lib.php');
+            require_once($CFG->dirroot . '/mod/communityforum/lib.php');
 
-            $forum = $event->get_record_snapshot('forum', $event->other['instanceid']);
+            $forum = $event->get_record_snapshot('communityforum', $event->other['instanceid']);
             forum_instance_created($event->get_context(), $forum);
         }
     }
@@ -126,9 +126,9 @@ class mod_forum_observer {
         $course = $event->get_record_snapshot('course', $event->objectid);
         $format = course_get_format($course);
         if ($format->supports_news() && !empty($course->newsitems)) {
-            require_once($CFG->dirroot . '/mod/forum/lib.php');
+            require_once($CFG->dirroot . '/mod/communityforum/lib.php');
             // Auto create the announcements forum.
-            forum_get_course_forum($event->objectid, 'news');
+            communityforum_get_course_forum($event->objectid, 'news');
         }
     }
 
@@ -144,9 +144,9 @@ class mod_forum_observer {
         $course = $event->get_record_snapshot('course', $event->objectid);
         $format = course_get_format($course);
         if ($format->supports_news() && !empty($course->newsitems)) {
-            require_once($CFG->dirroot . '/mod/forum/lib.php');
+            require_once($CFG->dirroot . '/mod/communityforum/lib.php');
             // Auto create the announcements forum.
-            forum_get_course_forum($event->objectid, 'news');
+            communityforum_get_course_forum($event->objectid, 'news');
         }
     }
 }

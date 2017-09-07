@@ -28,7 +28,7 @@ $capabilities = array(
 
     'mod/communityforum:addinstance' => array(
         'riskbitmask' => RISK_XSS,
-
+        'contextlevel' => CONTEXT_MODULE,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
