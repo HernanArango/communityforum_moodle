@@ -6126,10 +6126,10 @@ function communityforum_tp_mark_posts_read($user, $postids) {
     $params = array_merge($postidparams, $insertparams);
 
     if ($CFG->communityforum_allowforcedreadtracking) {
-        $trackingsql = "AND (f.trackingtype = ".communityforum_TRACKING_FORCED."
-                        OR (f.trackingtype = ".communityforum_TRACKING_OPTIONAL." AND tf.id IS NULL))";
+        $trackingsql = "AND (f.trackingtype = ".COMMUNITYFORUM_TRACKING_FORCED."
+                        OR (f.trackingtype = ".COMMUNITYFORUM_TRACKING_OPTIONAL." AND tf.id IS NULL))";
     } else {
-        $trackingsql = "AND ((f.trackingtype = ".communityforum_TRACKING_OPTIONAL."  OR f.trackingtype = ".communityforum_TRACKING_FORCED.")
+        $trackingsql = "AND ((f.trackingtype = ".COMMUNITYFORUM_TRACKING_OPTIONAL."  OR f.trackingtype = ".COMMUNITYFORUM_TRACKING_FORCED.")
                             AND tf.id IS NULL)";
     }
 
@@ -6492,12 +6492,12 @@ function communityforum_tp_get_untracked_forums($userid, $courseid) {
     global $CFG, $DB;
 
     if ($CFG->communityforum_allowforcedreadtracking) {
-        $trackingsql = "AND (f.trackingtype = ".communityforum_TRACKING_OFF."
-                            OR (f.trackingtype = ".communityforum_TRACKING_OPTIONAL." AND (ft.id IS NOT NULL
+        $trackingsql = "AND (f.trackingtype = ".COMMUNITYFORUM_TRACKING_OFF."
+                            OR (f.trackingtype = ".COMMUNITYFORUM_TRACKING_OPTIONAL." AND (ft.id IS NOT NULL
                                 OR (SELECT trackforums FROM {user} WHERE id = ?) = 0)))";
     } else {
-        $trackingsql = "AND (f.trackingtype = ".communityforum_TRACKING_OFF."
-                            OR ((f.trackingtype = ".communityforum_TRACKING_OPTIONAL." OR f.trackingtype = ".communityforum_TRACKING_FORCED.")
+        $trackingsql = "AND (f.trackingtype = ".COMMUNITYFORUM_TRACKING_OFF."
+                            OR ((f.trackingtype = ".COMMUNITYFORUM_TRACKING_OPTIONAL." OR f.trackingtype = ".COMMUNITYFORUM_TRACKING_FORCED.")
                                 AND (ft.id IS NOT NULL
                                     OR (SELECT trackforums FROM {user} WHERE id = ?) = 0)))";
     }
@@ -6563,8 +6563,8 @@ function communityforum_tp_can_track_forums($forum=false, $user=false) {
         $forum = $DB->get_record('forum', array('id' => $forum), '', 'id,trackingtype');
     }
 
-    $forumallows = ($forum->trackingtype == communityforum_TRACKING_OPTIONAL);
-    $forumforced = ($forum->trackingtype == communityforum_TRACKING_FORCED);
+    $forumallows = ($forum->trackingtype == COMMUNITYFORUM_TRACKING_OPTIONAL);
+    $forumforced = ($forum->trackingtype == COMMUNITYFORUM_TRACKING_FORCED);
 
     if ($CFG->communityforum_allowforcedreadtracking) {
         // If we allow forcing, then forced forums takes procidence over user setting.
