@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   mod_forum
+ * @package   mod_communityforum
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,7 +26,7 @@
     require_once($CFG->libdir.'/completionlib.php');
 
     $id          = optional_param('id', 0, PARAM_INT);       // Course Module ID
-    $f           = optional_param('f', 0, PARAM_INT);        // Forum ID
+    $f           = optional_param('f', 0, PARAM_INT);        // communityforum ID
     $mode        = optional_param('mode', 0, PARAM_INT);     // Display mode (for single forum)
     $showall     = optional_param('showall', '', PARAM_INT); // show all discussions on one page
     $changegroup = optional_param('group', -1, PARAM_INT);   // choose the current group
@@ -45,49 +45,49 @@
     if ($search) {
         $params['search'] = $search;
     }
-    $PAGE->set_url('/mod/forum/view.php', $params);
-
+    $PAGE->set_url('/mod/communityforum/view.php', $params);
+	
     if ($id) {
-        if (! $cm = get_coursemodule_from_id('forum', $id)) {
+        if (! $cm = get_coursemodule_from_id('communityforum', $id)) {
             print_error('invalidcoursemodule');
         }
         if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
             print_error('coursemisconf');
         }
-        if (! $forum = $DB->get_record("forum", array("id" => $cm->instance))) {
-            print_error('invalidforumid', 'forum');
+        if (! $forum = $DB->get_record("communityforum", array("id" => $cm->instance))) {
+            print_error('invalidforumid', 'communityforum');
         }
         if ($forum->type == 'single') {
-            $PAGE->set_pagetype('mod-forum-discuss');
+            $PAGE->set_pagetype('mod-communityforum-discuss');
         }
         // move require_course_login here to use forced language for course
         // fix for MDL-6926
         require_course_login($course, true, $cm);
-        $strforums = get_string("modulenameplural", "forum");
-        $strforum = get_string("modulename", "forum");
+        $strforums = get_string("modulenameplural", "communityforum");
+        $strforum = get_string("modulename", "communityforum");
     } else if ($f) {
 
-        if (! $forum = $DB->get_record("forum", array("id" => $f))) {
-            print_error('invalidforumid', 'forum');
+        if (! $forum = $DB->get_record("communityforum", array("id" => $f))) {
+            print_error('invalidforumid', 'communityforum');
         }
         if (! $course = $DB->get_record("course", array("id" => $forum->course))) {
             print_error('coursemisconf');
         }
 
-        if (!$cm = get_coursemodule_from_instance("forum", $forum->id, $course->id)) {
+        if (!$cm = get_coursemodule_from_instance("communityforum", $forum->id, $course->id)) {
             print_error('missingparameter');
         }
         // move require_course_login here to use forced language for course
         // fix for MDL-6926
         require_course_login($course, true, $cm);
-        $strforums = get_string("modulenameplural", "forum");
-        $strforum = get_string("modulename", "forum");
+        $strforums = get_string("modulenameplural", "communityforum");
+        $strforum = get_string("modulename", "communityforum");
     } else {
         print_error('missingparameter');
     }
 
     if (!$PAGE->button) {
-        $PAGE->set_button(forum_search_form($course, $search));
+        $PAGE->set_button(communityforum_search_form($course, $search));
     }
 
     $context = context_module::instance($cm->id);
@@ -97,13 +97,13 @@
         require_once("$CFG->libdir/rsslib.php");
 
         $rsstitle = format_string($course->shortname, true, array('context' => context_course::instance($course->id))) . ': ' . format_string($forum->name);
-        rss_add_http_header($context, 'mod_forum', $forum, $rsstitle);
+        rss_add_http_header($context, 'mod_communityforum', $forum, $rsstitle);
     }
 
 /// Print header.
 
     $PAGE->set_title($forum->name);
-    $PAGE->add_body_class('forumtype-'.$forum->type);
+    $PAGE->add_body_class('communityforumtype-'.$forum->type);
     $PAGE->set_heading($course->fullname);
 
 /// Some capability checks.
@@ -111,22 +111,22 @@
         notice(get_string("activityiscurrentlyhidden"));
     }
 
-    if (!has_capability('mod/forum:viewdiscussion', $context)) {
-        notice(get_string('noviewdiscussionspermission', 'forum'));
+    if (!has_capability('mod/communityforum:viewdiscussion', $context)) {
+        notice(get_string('noviewdiscussionspermission', 'communityforum'));
     }
 
     // Mark viewed and trigger the course_module_viewed event.
-    forum_view($forum, $course, $cm, $context);
+    communityforum_view($forum, $course, $cm, $context);
 
     echo $OUTPUT->header();
 
     echo $OUTPUT->heading(format_string($forum->name), 2);
     if (!empty($forum->intro) && $forum->type != 'single' && $forum->type != 'teacher') {
-        echo $OUTPUT->box(format_module_intro('forum', $forum, $cm->id), 'generalbox', 'intro');
+        echo $OUTPUT->box(format_module_intro('communityforum', $forum, $cm->id), 'generalbox', 'intro');
     }
 
 /// find out current groups mode
-    groups_print_activity_menu($cm, $CFG->wwwroot . '/mod/forum/view.php?id=' . $cm->id);
+    groups_print_activity_menu($cm, $CFG->wwwroot . '/mod/communityforum/view.php?id=' . $cm->id);
 
     $SESSION->fromdiscussion = qualified_me();   // Return here if we post or set subscription etc
 
@@ -137,15 +137,15 @@
     // mode control.
     if ($forum->type == 'single') {
         $discussion = NULL;
-        $discussions = $DB->get_records('forum_discussions', array('forum'=>$forum->id), 'timemodified ASC');
+        $discussions = $DB->get_records('communityforum_discussions', array('communityforum'=>$forum->id), 'timemodified ASC');
         if (!empty($discussions)) {
             $discussion = array_pop($discussions);
         }
         if ($discussion) {
             if ($mode) {
-                set_user_preference("forum_displaymode", $mode);
+                set_user_preference("communityforum_displaymode", $mode);
             }
-            $displaymode = get_user_preferences("forum_displaymode", $CFG->forum_displaymode);
+            $displaymode = get_user_preferences("communityforum_displaymode", $CFG->forum_displaymode);
             forum_print_mode_form($forum->id, $displaymode, $forum->type);
         }
     }
@@ -154,62 +154,62 @@
         $a = new stdClass();
         $a->blockafter = $forum->blockafter;
         $a->blockperiod = get_string('secondstotime'.$forum->blockperiod);
-        echo $OUTPUT->notification(get_string('thisforumisthrottled', 'forum', $a));
+        echo $OUTPUT->notification(get_string('thisforumisthrottled', 'communityforum', $a));
     }
 
     if ($forum->type == 'qanda' && !has_capability('moodle/course:manageactivities', $context)) {
-        echo $OUTPUT->notification(get_string('qandanotify','forum'));
+        echo $OUTPUT->notification(get_string('qandanotify','communityforum'));
     }
 
     switch ($forum->type) {
         case 'single':
             if (!empty($discussions) && count($discussions) > 1) {
-                echo $OUTPUT->notification(get_string('warnformorepost', 'forum'));
+                echo $OUTPUT->notification(get_string('warnformorepost', 'communityforum'));
             }
-            if (! $post = forum_get_post_full($discussion->firstpost)) {
-                print_error('cannotfindfirstpost', 'forum');
+            if (! $post = communityforum_get_post_full($discussion->firstpost)) {
+                print_error('cannotfindfirstpost', 'communityforum');
             }
             if ($mode) {
-                set_user_preference("forum_displaymode", $mode);
+                set_user_preference("communityforum_displaymode", $mode);
             }
 
-            $canreply    = forum_user_can_post($forum, $discussion, $USER, $cm, $course, $context);
-            $canrate     = has_capability('mod/forum:rate', $context);
-            $displaymode = get_user_preferences("forum_displaymode", $CFG->forum_displaymode);
+            $canreply    = communityforum_user_can_post($forum, $discussion, $USER, $cm, $course, $context);
+            $canrate     = has_capability('mod/communityforum:rate', $context);
+            $displaymode = get_user_preferences("communityforum_displaymode", $CFG->forum_displaymode);
 
             echo '&nbsp;'; // this should fix the floating in FF
-            forum_print_discussion($course, $cm, $forum, $discussion, $post, $displaymode, $canreply, $canrate);
+            communityforum_print_discussion($course, $cm, $forum, $discussion, $post, $displaymode, $canreply, $canrate);
             break;
 
         case 'eachuser':
             echo '<p class="mdl-align">';
-            if (forum_user_can_post_discussion($forum, null, -1, $cm)) {
-                print_string("allowsdiscussions", "forum");
+            if (communityforum_user_can_post_discussion($forum, null, -1, $cm)) {
+                print_string("allowsdiscussions", "communityforum");
             } else {
                 echo '&nbsp;';
             }
             echo '</p>';
             if (!empty($showall)) {
-                forum_print_latest_discussions($course, $forum, 0, 'header', '', -1, -1, -1, 0, $cm);
+                communityforum_print_latest_discussions($course, $forum, 0, 'header', '', -1, -1, -1, 0, $cm);
             } else {
-                forum_print_latest_discussions($course, $forum, -1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
+                communityforum_print_latest_discussions($course, $forum, -1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
             }
             break;
 
         case 'teacher':
             if (!empty($showall)) {
-                forum_print_latest_discussions($course, $forum, 0, 'header', '', -1, -1, -1, 0, $cm);
+                communityforum_print_latest_discussions($course, $forum, 0, 'header', '', -1, -1, -1, 0, $cm);
             } else {
-                forum_print_latest_discussions($course, $forum, -1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
+                communityforum_print_latest_discussions($course, $forum, -1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
             }
             break;
 
         case 'blog':
             echo '<br />';
             if (!empty($showall)) {
-                forum_print_latest_discussions($course, $forum, 0, 'plain', 'd.pinned DESC, p.created DESC', -1, -1, -1, 0, $cm);
+                communityforum_print_latest_discussions($course, $forum, 0, 'plain', 'd.pinned DESC, p.created DESC', -1, -1, -1, 0, $cm);
             } else {
-                forum_print_latest_discussions($course, $forum, -1, 'plain', 'd.pinned DESC, p.created DESC', -1, -1, $page,
+                communityforum_print_latest_discussions($course, $forum, -1, 'plain', 'd.pinned DESC, p.created DESC', -1, -1, $page,
                     $CFG->forum_manydiscussions, $cm);
             }
             break;
@@ -217,9 +217,9 @@
         default:
             echo '<br />';
             if (!empty($showall)) {
-                forum_print_latest_discussions($course, $forum, 0, 'header', '', -1, -1, -1, 0, $cm);
+                communityforum_print_latest_discussions($course, $forum, 0, 'header', '', -1, -1, -1, 0, $cm);
             } else {
-                forum_print_latest_discussions($course, $forum, -1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
+                communityforum_print_latest_discussions($course, $forum, -1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
             }
 
 
@@ -227,6 +227,6 @@
     }
 
     // Add the subscription toggle JS.
-    $PAGE->requires->yui_module('moodle-mod_forum-subscriptiontoggle', 'Y.M.mod_forum.subscriptiontoggle.init');
+    $PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
 
     echo $OUTPUT->footer($course);
