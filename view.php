@@ -149,18 +149,17 @@
             forum_print_mode_form($forum->id, $displaymode, $forum->type);
         }
     }
-
     if (!empty($forum->blockafter) && !empty($forum->blockperiod)) {
         $a = new stdClass();
         $a->blockafter = $forum->blockafter;
         $a->blockperiod = get_string('secondstotime'.$forum->blockperiod);
         echo $OUTPUT->notification(get_string('thisforumisthrottled', 'communityforum', $a));
     }
-
+    
     if ($forum->type == 'qanda' && !has_capability('moodle/course:manageactivities', $context)) {
         echo $OUTPUT->notification(get_string('qandanotify','communityforum'));
     }
-
+    
     switch ($forum->type) {
         case 'single':
             if (!empty($discussions) && count($discussions) > 1) {
