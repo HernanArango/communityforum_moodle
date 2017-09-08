@@ -39,7 +39,7 @@ class subscriptions {
      *
      * @var int
      */
-    const FORUM_DISCUSSION_UNSUBSCRIBED = -1;
+    const COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED = -1;
 
     /**
      * The subscription cache for forums.
@@ -144,7 +144,7 @@ class subscriptions {
      * @return bool
      */
     public static function is_forcesubscribed($forum) {
-        return ($forum->forcesubscribe == FORUM_FORCESUBSCRIBE);
+        return ($forum->forcesubscribe == COMMUNITYFORUM_FORCESUBSCRIBE);
     }
 
     /**
@@ -154,7 +154,7 @@ class subscriptions {
      * @return bool
      */
     public static function subscription_disabled($forum) {
-        return ($forum->forcesubscribe == FORUM_DISALLOWSUBSCRIBE);
+        return ($forum->forcesubscribe == COMMUNITYFORUM_DISALLOWSUBSCRIBE);
     }
 
     /**
