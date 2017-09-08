@@ -17,12 +17,12 @@
 /**
  * Forum subscription manager.
  *
- * @package    mod_forum
+ * @package    mod_communityforum
  * @copyright  2014 Andrew Nicols <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum;
+namespace mod_communityforum;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -104,9 +104,9 @@ class subscriptions {
         // If forum is force subscribed and has allowforcesubscribe, then user is subscribed.
         if (self::is_forcesubscribed($forum)) {
             if (!$cm) {
-                $cm = get_fast_modinfo($forum->course)->instances['forum'][$forum->id];
+                $cm = get_fast_modinfo($forum->course)->instances['communityforum'][$forum->id];
             }
-            if (has_capability('mod/forum:allowforcesubscribe', \context_module::instance($cm->id), $userid)) {
+            if (has_capability('mod/communityforum:allowforcesubscribe', \context_module::instance($cm->id), $userid)) {
                 return true;
             }
         }
@@ -119,7 +119,7 @@ class subscriptions {
 
         // Check whether there is a record for this discussion subscription.
         if (isset($subscriptions[$discussionid])) {
-            return ($subscriptions[$discussionid] != self::FORUM_DISCUSSION_UNSUBSCRIBED);
+            return ($subscriptions[$discussionid] != self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED);
         }
 
         return self::is_subscribed_to_forum($userid, $forum);
@@ -165,8 +165,8 @@ class subscriptions {
      */
     public static function is_subscribable($forum) {
         return (isloggedin() && !isguestuser() &&
-                !\mod_forum\subscriptions::is_forcesubscribed($forum) &&
-                !\mod_forum\subscriptions::subscription_disabled($forum));
+                !\mod_communityforum\subscriptions::is_forcesubscribed($forum) &&
+                !\mod_communityforum\subscriptions::subscription_disabled($forum));
     }
 
     /**
@@ -180,7 +180,7 @@ class subscriptions {
      */
     public static function set_subscription_mode($forumid, $status = 1) {
         global $DB;
-        return $DB->set_field("forum", "forcesubscribe", $status, array("id" => $forumid));
+        return $DB->set_field("communityforum", "forcesubscribe", $status, array("id" => $forumid));
     }
 
     /**
@@ -217,10 +217,10 @@ class subscriptions {
         // It is possible for users to be subscribed to a forum in subscription disallowed mode so they must be listed
         // here so that that can be unsubscribed from.
         $sql = "SELECT f.id, cm.id as cm, cm.visible, f.course
-                FROM {forum} f
+                FROM {communityforum} f
                 JOIN {course_modules} cm ON cm.instance = f.id
                 JOIN {modules} m ON m.name = :modulename AND m.id = cm.module
-                LEFT JOIN {forum_subscriptions} fs ON (fs.forum = f.id AND fs.userid = :userid)
+                LEFT JOIN {communityforum_subscriptions} fs ON (fs.forum = f.id AND fs.userid = :userid)
                 WHERE f.forcesubscribe <> :forcesubscribe
                 AND fs.id IS NOT NULL
                 AND cm.course
@@ -228,7 +228,7 @@ class subscriptions {
         $params = array_merge($courseparams, array(
             'modulename'=>'forum',
             'userid' => $USER->id,
-            'forcesubscribe' => FORUM_FORCESUBSCRIBE,
+            'forcesubscribe' => COMMUNITYFORUM_FORCESUBSCRIBE,
         ));
         $forums = $DB->get_recordset_sql($sql, $params);
 
@@ -263,7 +263,7 @@ class subscriptions {
         global $DB;
 
         // Only active enrolled users or everybody on the frontpage.
-        list($esql, $params) = get_enrolled_sql($context, 'mod/forum:allowforcesubscribe', $groupid, true);
+        list($esql, $params) = get_enrolled_sql($context, 'mod/communityforum:allowforcesubscribe', $groupid, true);
         if (!$sort) {
             list($sort, $sortparams) = users_order_by_sql('u');
             $params = array_merge($params, $sortparams);

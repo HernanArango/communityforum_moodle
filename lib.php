@@ -5389,7 +5389,7 @@ function communityforum_print_latest_discussions($course, $forum, $maxdiscussion
                 $buttonadd = get_string('addanewdiscussion', 'forum');
                 break;
         }
-        $button = new single_button(new moodle_url('/mod/forum/post.php', ['forum' => $forum->id]), $buttonadd, 'get');
+        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['forum' => $forum->id]), $buttonadd, 'get');
         $button->class = 'singlebutton forumaddnew';
         $button->formid = 'newdiscussionform';
         echo $OUTPUT->render($button);
