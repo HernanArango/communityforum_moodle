@@ -38,7 +38,7 @@ $groupid = optional_param('groupid', null, PARAM_INT);
 
 $PAGE->set_url('/mod/communityforum/post.php', array(
         'reply' => $reply,
-        'communityforum' => $forum,
+        'forum' => $forum,
         'edit'  => $edit,
         'delete'=> $delete,
         'prune' => $prune,
