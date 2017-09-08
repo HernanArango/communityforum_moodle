@@ -4752,13 +4752,13 @@ function communityforum_count_replies($post, $children=true) {
 function communityforum_post_subscription($fromform, $forum, $discussion) {
     global $USER;
 
-    if (\mod_forum\subscriptions::is_forcesubscribed($forum)) {
+    if (\mod_communityforum\subscriptions::is_forcesubscribed($forum)) {
         return "";
-    } else if (\mod_forum\subscriptions::subscription_disabled($forum)) {
-        $subscribed = \mod_forum\subscriptions::is_subscribed($USER->id, $forum);
+    } else if (\mod_communityforum\subscriptions::subscription_disabled($forum)) {
+        $subscribed = \mod_communityforum\subscriptions::is_subscribed($USER->id, $forum);
         if ($subscribed && !has_capability('moodle/course:manageactivities', context_course::instance($forum->course), $USER->id)) {
             // This user should not be subscribed to the forum.
-            \mod_forum\subscriptions::unsubscribe_user($USER->id, $forum);
+            \mod_communityforum\subscriptions::unsubscribe_user($USER->id, $forum);
         }
         return "";
     }
@@ -4769,12 +4769,12 @@ function communityforum_post_subscription($fromform, $forum, $discussion) {
     $info->forum = format_string($forum->name);
 
     if (isset($fromform->discussionsubscribe) && $fromform->discussionsubscribe) {
-        if ($result = \mod_forum\subscriptions::subscribe_user_to_discussion($USER->id, $discussion)) {
-            return html_writer::tag('p', get_string('discussionnowsubscribed', 'forum', $info));
+        if ($result = \mod_communityforum_post_subscription\subscriptions::subscribe_user_to_discussion($USER->id, $discussion)) {
+            return html_writer::tag('p', get_string('discussionnowsubscribed', 'communityforum', $info));
         }
     } else {
-        if ($result = \mod_forum\subscriptions::unsubscribe_user_from_discussion($USER->id, $discussion)) {
-            return html_writer::tag('p', get_string('discussionnownotsubscribed', 'forum', $info));
+        if ($result = \mod_communityforum\subscriptions::unsubscribe_user_from_discussion($USER->id, $discussion)) {
+            return html_writer::tag('p', get_string('discussionnownotsubscribed', 'communityforum', $info));
         }
     }
 
