@@ -28,7 +28,7 @@ require_once('lib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $reply   = optional_param('reply', 0, PARAM_INT);
-$forum   = optional_param('communityforum', 0, PARAM_INT);
+$forum   = optional_param('forum', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
 $prune   = optional_param('prune', 0, PARAM_INT);
@@ -562,7 +562,7 @@ $mform_post = new mod_communityforum_post_form('post.php', array('course' => $co
                                                         'modcontext' => $modcontext,
                                                         'forum' => $forum,
                                                         'post' => $post,
-                                                        'subscribe' => \mod_forum\subscriptions::is_subscribed($USER->id, $forum,
+                                                        'subscribe' => \mod_communityforum\subscriptions::is_subscribed($USER->id, $forum,
                                                                 null, $cm),
                                                         'thresholdwarning' => $thresholdwarning,
                                                         'edit' => $edit), 'post', '', array('id' => 'mformforum'));
