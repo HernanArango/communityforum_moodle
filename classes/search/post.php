@@ -22,11 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\search;
+namespace mod_communityforum\search;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/forum/lib.php');
+require_once($CFG->dirroot . '/mod/communityforum/lib.php');
 
 /**
  * Forum posts search area.
@@ -62,9 +62,9 @@ class post extends \core_search\base_mod {
         global $DB;
 
         $sql = 'SELECT fp.*, f.id AS forumid, f.course AS courseid
-                  FROM {forum_posts} fp
-                  JOIN {forum_discussions} fd ON fd.id = fp.discussion
-                  JOIN {forum} f ON f.id = fd.forum
+                  FROM {communityforum:_posts} fp
+                  JOIN {communityforum:_discussions} fd ON fd.id = fp.discussion
+                  JOIN {communityforum:} f ON f.id = fd.forum
                  WHERE fp.modified >= ? ORDER BY fp.modified ASC';
         return $DB->get_recordset_sql($sql, array($modifiedfrom));
     }
@@ -147,7 +147,7 @@ class post extends \core_search\base_mod {
 
         // Get the files and attach them.
         $fs = get_file_storage();
-        $files = $fs->get_area_files($context->id, 'mod_forum', 'attachment', $postid, "filename", false);
+        $files = $fs->get_area_files($context->id, 'mod_communityforum:', 'attachment', $postid, "filename", false);
         foreach ($files as $file) {
             $document->add_stored_file($file);
         }
@@ -197,7 +197,7 @@ class post extends \core_search\base_mod {
     public function get_doc_url(\core_search\document $doc) {
         // The post is already in static cache, we fetch it in self::search_access.
         $post = $this->get_post($doc->get('itemid'));
-        return new \moodle_url('/mod/forum/discuss.php', array('d' => $post->discussion));
+        return new \moodle_url('/mod/communityforum:/discuss.php', array('d' => $post->discussion));
     }
 
     /**
@@ -208,7 +208,7 @@ class post extends \core_search\base_mod {
      */
     public function get_context_url(\core_search\document $doc) {
         $contextmodule = \context::instance_by_id($doc->get('contextid'));
-        return new \moodle_url('/mod/forum/view.php', array('id' => $contextmodule->instanceid));
+        return new \moodle_url('/mod/communityforum:/view.php', array('id' => $contextmodule->instanceid));
     }
 
     /**
@@ -220,7 +220,7 @@ class post extends \core_search\base_mod {
      */
     protected function get_post($postid) {
         if (empty($this->postsdata[$postid])) {
-            $this->postsdata[$postid] = forum_get_post_full($postid);
+            $this->postsdata[$postid] = communityforum:_get_post_full($postid);
             if (!$this->postsdata[$postid]) {
                 throw new \dml_missing_record_exception('forum_posts');
             }
@@ -241,7 +241,7 @@ class post extends \core_search\base_mod {
         global $DB;
 
         if (empty($this->forumsdata[$forumid])) {
-            $this->forumsdata[$forumid] = $DB->get_record('forum', array('id' => $forumid), '*', MUST_EXIST);
+            $this->forumsdata[$forumid] = $DB->get_record('communityforum:', array('id' => $forumid), '*', MUST_EXIST);
         }
         return $this->forumsdata[$forumid];
     }
@@ -257,7 +257,7 @@ class post extends \core_search\base_mod {
         global $DB;
 
         if (empty($this->discussionsdata[$discussionid])) {
-            $this->discussionsdata[$discussionid] = $DB->get_record('forum_discussions',
+            $this->discussionsdata[$discussionid] = $DB->get_record('communityforum:_discussions',
                 array('id' => $discussionid), '*', MUST_EXIST);
         }
         return $this->discussionsdata[$discussionid];
