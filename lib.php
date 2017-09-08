@@ -4769,7 +4769,7 @@ function communityforum_post_subscription($fromform, $forum, $discussion) {
     $info->forum = format_string($forum->name);
 
     if (isset($fromform->discussionsubscribe) && $fromform->discussionsubscribe) {
-        if ($result = \mod_communityforum_post_subscription\subscriptions::subscribe_user_to_discussion($USER->id, $discussion)) {
+        if ($result = \mod_communityforum\subscriptions::subscribe_user_to_discussion($USER->id, $discussion)) {
             return html_writer::tag('p', get_string('discussionnowsubscribed', 'communityforum', $info));
         }
     } else {

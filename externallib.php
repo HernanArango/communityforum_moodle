@@ -866,7 +866,7 @@ class mod_forum_external extends external_api {
 
             $settings = new stdClass();
             $settings->discussionsubscribe = $options['discussionsubscribe'];
-            forum_post_subscription($settings, $forum, $discussion);
+            communityforum_post_subscription($settings, $forum, $discussion);
         } else {
             throw new moodle_exception('couldnotadd', 'forum');
         }
@@ -1054,7 +1054,7 @@ class mod_forum_external extends external_api {
 
             $settings = new stdClass();
             $settings->discussionsubscribe = $options['discussionsubscribe'];
-            forum_post_subscription($settings, $forum, $discussion);
+            communityforum_post_subscription($settings, $forum, $discussion);
         } else {
             throw new moodle_exception('couldnotadd', 'forum');
         }
