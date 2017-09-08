@@ -28,7 +28,7 @@ require_once('lib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $reply   = optional_param('reply', 0, PARAM_INT);
-$forum   = optional_param('communityforum', 0, PARAM_INT);
+$forum   = optional_param('forum', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
 $prune   = optional_param('prune', 0, PARAM_INT);
@@ -38,7 +38,7 @@ $groupid = optional_param('groupid', null, PARAM_INT);
 
 $PAGE->set_url('/mod/communityforum/post.php', array(
         'reply' => $reply,
-        'communityforum' => $forum,
+        'forum' => $forum,
         'edit'  => $edit,
         'delete'=> $delete,
         'prune' => $prune,
