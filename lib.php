@@ -2126,7 +2126,7 @@ function communityforum_get_unmailed_posts($starttime, $endtime, $now=null) {
     global $CFG, $DB;
 
     $params = array();
-    $params['mailed'] = communityforum_MAILED_PENDING;
+    $params['mailed'] = COMMUNITYFORUM_MAILED_PENDING;
     $params['ptimestart'] = $starttime;
     $params['ptimeend'] = $endtime;
     $params['mailnow'] = 1;
@@ -2172,11 +2172,11 @@ function communityforum_mark_old_posts_as_mailed($endtime, $now=null) {
     }
 
     $params = array();
-    $params['mailedsuccess'] = communityforum_MAILED_SUCCESS;
+    $params['mailedsuccess'] = COMMUNITYFORUM_MAILED_SUCCESS;
     $params['now'] = $now;
     $params['endtime'] = $endtime;
     $params['mailnow'] = 1;
-    $params['mailedpending'] = communityforum_MAILED_PENDING;
+    $params['mailedpending'] = COMMUNITYFORUM_MAILED_PENDING;
 
     if (empty($CFG->communityforum_enabletimedposts)) {
         return $DB->execute("UPDATE {communityforum_posts}
@@ -4372,7 +4372,7 @@ function communityforum_add_new_post($post, $mform, $unused = null) {
     $context    = context_module::instance($cm->id);
 
     $post->created    = $post->modified = time();
-    $post->mailed     = communityforum_MAILED_PENDING;
+    $post->mailed     = COMMUNITYFORUM_MAILED_PENDING;
     $post->userid     = $USER->id;
     $post->attachment = "";
     if (!isset($post->totalscore)) {
@@ -4498,7 +4498,7 @@ function communityforum_add_discussion($discussion, $mform=null, $unused=null, $
     $post->userid        = $userid;
     $post->created       = $timenow;
     $post->modified      = $timenow;
-    $post->mailed        = communityforum_MAILED_PENDING;
+    $post->mailed        = COMMUNITYFORUM_MAILED_PENDING;
     $post->subject       = $discussion->name;
     $post->message       = $discussion->message;
     $post->messageformat = $discussion->messageformat;
@@ -5389,7 +5389,7 @@ function communityforum_print_latest_discussions($course, $forum, $maxdiscussion
                 $buttonadd = get_string('addanewdiscussion', 'forum');
                 break;
         }
-        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['forum' => $forum->id]), $buttonadd, 'get');
+        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['communityforum' => $forum->id]), $buttonadd, 'get');
         $button->class = 'singlebutton forumaddnew';
         $button->formid = 'newdiscussionform';
         echo $OUTPUT->render($button);
