@@ -787,7 +787,6 @@ if ($mform_post->is_cancelled()) {
     } else if ($fromform->discussion) { // Adding a new post to an existing discussion
         // Before we add this we must check that the user will not exceed the blocking threshold.
         communityforum_check_blocking_threshold($thresholdwarning);
-
         unset($fromform->groupid);
         $message = '';
         $addpost = $fromform;

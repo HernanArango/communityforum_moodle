@@ -3011,7 +3011,7 @@ function communityforum_get_course_forum($courseid, $type) {
         case "news":
             $forum->name  = get_string("namenews", "forum");
             $forum->intro = get_string("intronews", "forum");
-            $forum->forcesubscribe = communityforum_FORCESUBSCRIBE;
+            $forum->forcesubscribe = COMMUNITYFORUM_FORCESUBSCRIBE;
             $forum->assessed = 0;
             if ($courseid == SITEID) {
                 $forum->name  = get_string("sitenews");
@@ -4489,8 +4489,8 @@ function communityforum_add_discussion($discussion, $mform=null, $unused=null, $
     // The first post is stored as a real post, and linked
     // to from the discuss entry.
 
-    $forum = $DB->get_record('forum', array('id'=>$discussion->forum));
-    $cm    = get_coursemodule_from_instance('forum', $forum->id);
+    $forum = $DB->get_record('communityforum', array('id'=>$discussion->forum));
+    $cm    = get_coursemodule_from_instance('communityforum', $forum->id);
 
     $post = new stdClass();
     $post->discussion    = 0;
