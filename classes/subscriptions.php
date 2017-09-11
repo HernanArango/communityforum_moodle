@@ -226,7 +226,7 @@ class subscriptions {
                 AND cm.course
                 $coursesql";
         $params = array_merge($courseparams, array(
-            'modulename'=>'forum',
+            'modulename'=>'communityforum',
             'userid' => $USER->id,
             'forcesubscribe' => COMMUNITYFORUM_FORCESUBSCRIBE,
         ));
