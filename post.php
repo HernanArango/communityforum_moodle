@@ -28,7 +28,7 @@ require_once('lib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $reply   = optional_param('reply', 0, PARAM_INT);
-$forum   = optional_param('forum', 0, PARAM_INT);
+$forum   = optional_param('communityforum', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
 $prune   = optional_param('prune', 0, PARAM_INT);
@@ -59,6 +59,7 @@ if (!isloggedin() or isguestuser()) {
     }
 
     if (!empty($forum)) {      // User is starting a new discussion in a forum
+
         if (! $forum = $DB->get_record('communityforum', array('id' => $forum))) {
             print_error('invalidforumid', 'communityforum');
         }
@@ -98,6 +99,7 @@ if (!isloggedin() or isguestuser()) {
 require_login(0, false);   // Script is useless unless they're logged in
 
 if (!empty($forum)) {      // User is starting a new discussion in a forum
+    
     if (! $forum = $DB->get_record("communityforum", array("id" => $forum))) {
         print_error('invalidforumid', 'communityforum');
     }
@@ -448,7 +450,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
         // User submits the data.
         $newdiscussion = new stdClass();
         $newdiscussion->course       = $discussion->course;
-        $newdiscussion->forum        = $discussion->forum;
+        $newdiscussion->forum        = $x->forum;
         $newdiscussion->name         = $name;
         $newdiscussion->firstpost    = $post->id;
         $newdiscussion->userid       = $discussion->userid;
@@ -785,7 +787,6 @@ if ($mform_post->is_cancelled()) {
     } else if ($fromform->discussion) { // Adding a new post to an existing discussion
         // Before we add this we must check that the user will not exceed the blocking threshold.
         communityforum_check_blocking_threshold($thresholdwarning);
-
         unset($fromform->groupid);
         $message = '';
         $addpost = $fromform;

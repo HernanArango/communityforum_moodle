@@ -713,18 +713,18 @@ class subscriptions {
         global $DB;
 
         // First check whether the user is subscribed to the discussion already.
-        $subscription = $DB->get_record('forum_discussion_subs', array('userid' => $userid, 'discussion' => $discussion->id));
+        $subscription = $DB->get_record('communityforum_discuss_subs', array('userid' => $userid, 'discussion' => $discussion->id));
         if ($subscription) {
-            if ($subscription->preference != self::FORUM_DISCUSSION_UNSUBSCRIBED) {
+            if ($subscription->preference != self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                 // The user is already subscribed to the discussion. Ignore.
                 return false;
             }
         }
         // No discussion-level subscription. Check for a forum level subscription.
-        if ($DB->record_exists('forum_subscriptions', array('userid' => $userid, 'forum' => $discussion->forum))) {
-            if ($subscription && $subscription->preference == self::FORUM_DISCUSSION_UNSUBSCRIBED) {
+        if ($DB->record_exists('communityforum_subscriptions', array('userid' => $userid, 'forum' => $discussion->forum))) {
+            if ($subscription && $subscription->preference == self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                 // The user is subscribed to the forum, but unsubscribed from the discussion, delete the discussion preference.
-                $DB->delete_records('forum_discussion_subs', array('id' => $subscription->id));
+                $DB->delete_records('communityforum_discuss_subs', array('id' => $subscription->id));
                 unset(self::$forumdiscussioncache[$userid][$discussion->forum][$discussion->id]);
             } else {
                 // The user is already subscribed to the forum. Ignore.
@@ -733,7 +733,7 @@ class subscriptions {
         } else {
             if ($subscription) {
                 $subscription->preference = time();
-                $DB->update_record('forum_discussion_subs', $subscription);
+                $DB->update_record('communityforum_discuss_subs', $subscription);
             } else {
                 $subscription = new \stdClass();
                 $subscription->userid  = $userid;
@@ -741,12 +741,12 @@ class subscriptions {
                 $subscription->discussion = $discussion->id;
                 $subscription->preference = time();
 
-                $subscription->id = $DB->insert_record('forum_discussion_subs', $subscription);
+                $subscription->id = $DB->insert_record('communityforum_discuss_subs', $subscription);
                 self::$forumdiscussioncache[$userid][$discussion->forum][$discussion->id] = $subscription->preference;
             }
         }
 
-        $context = forum_get_context($discussion->forum, $context);
+        $context = communityforum_get_context($discussion->forum, $context);
         $params = array(
             'context' => $context,
             'objectid' => $subscription->id,
@@ -775,18 +775,18 @@ class subscriptions {
         global $DB;
 
         // First check whether the user's subscription preference for this discussion.
-        $subscription = $DB->get_record('forum_discussion_subs', array('userid' => $userid, 'discussion' => $discussion->id));
+        $subscription = $DB->get_record('communityforum_discussion_subs', array('userid' => $userid, 'discussion' => $discussion->id));
         if ($subscription) {
-            if ($subscription->preference == self::FORUM_DISCUSSION_UNSUBSCRIBED) {
+            if ($subscription->preference == self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                 // The user is already unsubscribed from the discussion. Ignore.
                 return false;
             }
         }
         // No discussion-level preference. Check for a forum level subscription.
-        if (!$DB->record_exists('forum_subscriptions', array('userid' => $userid, 'forum' => $discussion->forum))) {
-            if ($subscription && $subscription->preference != self::FORUM_DISCUSSION_UNSUBSCRIBED) {
+        if (!$DB->record_exists('communityforum_subscriptions', array('userid' => $userid, 'forum' => $discussion->forum))) {
+            if ($subscription && $subscription->preference != self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                 // The user is not subscribed to the forum, but subscribed from the discussion, delete the discussion subscription.
-                $DB->delete_records('forum_discussion_subs', array('id' => $subscription->id));
+                $DB->delete_records('communityforum_discussion_subs', array('id' => $subscription->id));
                 unset(self::$forumdiscussioncache[$userid][$discussion->forum][$discussion->id]);
             } else {
                 // The user is not subscribed from the forum. Ignore.
@@ -794,21 +794,21 @@ class subscriptions {
             }
         } else {
             if ($subscription) {
-                $subscription->preference = self::FORUM_DISCUSSION_UNSUBSCRIBED;
-                $DB->update_record('forum_discussion_subs', $subscription);
+                $subscription->preference = self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED;
+                $DB->update_record('communityforum_discussion_subs', $subscription);
             } else {
                 $subscription = new \stdClass();
                 $subscription->userid  = $userid;
                 $subscription->forum = $discussion->forum;
                 $subscription->discussion = $discussion->id;
-                $subscription->preference = self::FORUM_DISCUSSION_UNSUBSCRIBED;
+                $subscription->preference = self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED;
 
-                $subscription->id = $DB->insert_record('forum_discussion_subs', $subscription);
+                $subscription->id = $DB->insert_record('communityforum_discussion_subs', $subscription);
             }
             self::$forumdiscussioncache[$userid][$discussion->forum][$discussion->id] = $subscription->preference;
         }
 
-        $context = forum_get_context($discussion->forum, $context);
+        $context = communityforum_get_context($discussion->forum, $context);
         $params = array(
             'context' => $context,
             'objectid' => $subscription->id,

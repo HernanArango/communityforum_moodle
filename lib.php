@@ -2126,7 +2126,7 @@ function communityforum_get_unmailed_posts($starttime, $endtime, $now=null) {
     global $CFG, $DB;
 
     $params = array();
-    $params['mailed'] = communityforum_MAILED_PENDING;
+    $params['mailed'] = COMMUNITYFORUM_MAILED_PENDING;
     $params['ptimestart'] = $starttime;
     $params['ptimeend'] = $endtime;
     $params['mailnow'] = 1;
@@ -2172,11 +2172,11 @@ function communityforum_mark_old_posts_as_mailed($endtime, $now=null) {
     }
 
     $params = array();
-    $params['mailedsuccess'] = communityforum_MAILED_SUCCESS;
+    $params['mailedsuccess'] = COMMUNITYFORUM_MAILED_SUCCESS;
     $params['now'] = $now;
     $params['endtime'] = $endtime;
     $params['mailnow'] = 1;
-    $params['mailedpending'] = communityforum_MAILED_PENDING;
+    $params['mailedpending'] = COMMUNITYFORUM_MAILED_PENDING;
 
     if (empty($CFG->communityforum_enabletimedposts)) {
         return $DB->execute("UPDATE {communityforum_posts}
@@ -3011,7 +3011,7 @@ function communityforum_get_course_forum($courseid, $type) {
         case "news":
             $forum->name  = get_string("namenews", "forum");
             $forum->intro = get_string("intronews", "forum");
-            $forum->forcesubscribe = communityforum_FORCESUBSCRIBE;
+            $forum->forcesubscribe = COMMUNITYFORUM_FORCESUBSCRIBE;
             $forum->assessed = 0;
             if ($courseid == SITEID) {
                 $forum->name  = get_string("sitenews");
@@ -4372,7 +4372,7 @@ function communityforum_add_new_post($post, $mform, $unused = null) {
     $context    = context_module::instance($cm->id);
 
     $post->created    = $post->modified = time();
-    $post->mailed     = communityforum_MAILED_PENDING;
+    $post->mailed     = COMMUNITYFORUM_MAILED_PENDING;
     $post->userid     = $USER->id;
     $post->attachment = "";
     if (!isset($post->totalscore)) {
@@ -4489,8 +4489,8 @@ function communityforum_add_discussion($discussion, $mform=null, $unused=null, $
     // The first post is stored as a real post, and linked
     // to from the discuss entry.
 
-    $forum = $DB->get_record('forum', array('id'=>$discussion->forum));
-    $cm    = get_coursemodule_from_instance('forum', $forum->id);
+    $forum = $DB->get_record('communityforum', array('id'=>$discussion->forum));
+    $cm    = get_coursemodule_from_instance('communityforum', $forum->id);
 
     $post = new stdClass();
     $post->discussion    = 0;
@@ -4498,7 +4498,7 @@ function communityforum_add_discussion($discussion, $mform=null, $unused=null, $
     $post->userid        = $userid;
     $post->created       = $timenow;
     $post->modified      = $timenow;
-    $post->mailed        = communityforum_MAILED_PENDING;
+    $post->mailed        = COMMUNITYFORUM_MAILED_PENDING;
     $post->subject       = $discussion->name;
     $post->message       = $discussion->message;
     $post->messageformat = $discussion->messageformat;
@@ -4752,13 +4752,13 @@ function communityforum_count_replies($post, $children=true) {
 function communityforum_post_subscription($fromform, $forum, $discussion) {
     global $USER;
 
-    if (\mod_forum\subscriptions::is_forcesubscribed($forum)) {
+    if (\mod_communityforum\subscriptions::is_forcesubscribed($forum)) {
         return "";
-    } else if (\mod_forum\subscriptions::subscription_disabled($forum)) {
-        $subscribed = \mod_forum\subscriptions::is_subscribed($USER->id, $forum);
+    } else if (\mod_communityforum\subscriptions::subscription_disabled($forum)) {
+        $subscribed = \mod_communityforum\subscriptions::is_subscribed($USER->id, $forum);
         if ($subscribed && !has_capability('moodle/course:manageactivities', context_course::instance($forum->course), $USER->id)) {
             // This user should not be subscribed to the forum.
-            \mod_forum\subscriptions::unsubscribe_user($USER->id, $forum);
+            \mod_communityforum\subscriptions::unsubscribe_user($USER->id, $forum);
         }
         return "";
     }
@@ -4769,12 +4769,12 @@ function communityforum_post_subscription($fromform, $forum, $discussion) {
     $info->forum = format_string($forum->name);
 
     if (isset($fromform->discussionsubscribe) && $fromform->discussionsubscribe) {
-        if ($result = \mod_forum\subscriptions::subscribe_user_to_discussion($USER->id, $discussion)) {
-            return html_writer::tag('p', get_string('discussionnowsubscribed', 'forum', $info));
+        if ($result = \mod_communityforum\subscriptions::subscribe_user_to_discussion($USER->id, $discussion)) {
+            return html_writer::tag('p', get_string('discussionnowsubscribed', 'communityforum', $info));
         }
     } else {
-        if ($result = \mod_forum\subscriptions::unsubscribe_user_from_discussion($USER->id, $discussion)) {
-            return html_writer::tag('p', get_string('discussionnownotsubscribed', 'forum', $info));
+        if ($result = \mod_communityforum\subscriptions::unsubscribe_user_from_discussion($USER->id, $discussion)) {
+            return html_writer::tag('p', get_string('discussionnownotsubscribed', 'communityforum', $info));
         }
     }
 
@@ -5389,7 +5389,7 @@ function communityforum_print_latest_discussions($course, $forum, $maxdiscussion
                 $buttonadd = get_string('addanewdiscussion', 'forum');
                 break;
         }
-        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['forum' => $forum->id]), $buttonadd, 'get');
+        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['communityforum' => $forum->id]), $buttonadd, 'get');
         $button->class = 'singlebutton forumaddnew';
         $button->formid = 'newdiscussionform';
         echo $OUTPUT->render($button);
