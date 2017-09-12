@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\event;
+namespace mod_communityforum\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -78,7 +78,7 @@ class user_report_viewed extends \core\event\base {
      */
     public function get_url() {
 
-        $url = new \moodle_url('/mod/forum/user.php', array('id' => $this->relateduserid,
+        $url = new \moodle_url('/mod/communityforum/user.php', array('id' => $this->relateduserid,
             'mode' => $this->other['reportmode']));
 
         if ($this->courseid != SITEID) {
@@ -94,8 +94,8 @@ class user_report_viewed extends \core\event\base {
      * @return array|null
      */
     protected function get_legacy_logdata() {
-        // The legacy log table expects a relative path to /mod/forum/.
-        $logurl = substr($this->get_url()->out_as_local_url(), strlen('/mod/forum/'));
+        // The legacy log table expects a relative path to /mod/communityforum/.
+        $logurl = substr($this->get_url()->out_as_local_url(), strlen('/mod/communityforum/'));
 
         return array($this->courseid, 'forum', 'user report', $logurl, $this->relateduserid);
     }

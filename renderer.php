@@ -31,7 +31,7 @@
  * @copyright 2009 Sam Hemelryk
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  **/
-class mod_forum_renderer extends plugin_renderer_base {
+class mod_communityforum_renderer extends plugin_renderer_base {
 
     /**
      * Returns the navigation to the previous and next discussion.
@@ -46,14 +46,14 @@ class mod_forum_renderer extends plugin_renderer_base {
             $html .= html_writer::start_tag('div', array('class' => 'discussion-nav clearfix'));
             $html .= html_writer::start_tag('ul');
             if ($prev) {
-                $url = new moodle_url('/mod/forum/discuss.php', array('d' => $prev->id));
+                $url = new moodle_url('/mod/communityforum/discuss.php', array('d' => $prev->id));
                 $html .= html_writer::start_tag('li', array('class' => 'prev-discussion'));
                 $html .= html_writer::link($url, format_string($prev->name),
                     array('aria-label' => get_string('prevdiscussiona', 'mod_forum', format_string($prev->name))));
                 $html .= html_writer::end_tag('li');
             }
             if ($next) {
-                $url = new moodle_url('/mod/forum/discuss.php', array('d' => $next->id));
+                $url = new moodle_url('/mod/communityforum/discuss.php', array('d' => $next->id));
                 $html .= html_writer::start_tag('li', array('class' => 'next-discussion'));
                 $html .= html_writer::link($url, format_string($next->name),
                     array('aria-label' => get_string('nextdiscussiona', 'mod_forum', format_string($next->name))));
@@ -187,10 +187,10 @@ class mod_forum_renderer extends plugin_renderer_base {
     /**
      * Display a forum post in the relevant context.
      *
-     * @param \mod_forum\output\forum_post $post The post to display.
+     * @param \mod_communityforum\output\forum_post $post The post to display.
      * @return string
      */
-    public function render_forum_post_email(\mod_forum\output\forum_post_email $post) {
+    public function render_forum_post_email(\mod_communityforum\output\forum_post_email $post) {
         $data = $post->export_for_template($this, $this->target === RENDERER_TARGET_TEXTEMAIL);
         return $this->render_from_template('mod_forum/' . $this->forum_post_template(), $data);
     }
@@ -230,20 +230,20 @@ class mod_forum_renderer extends plugin_renderer_base {
     /**
      * Render quick search form.
      *
-     * @param \mod_forum\output\quick_search_form $form The renderable.
+     * @param \mod_communityforum\output\quick_search_form $form The renderable.
      * @return string
      */
-    public function render_quick_search_form(\mod_forum\output\quick_search_form $form) {
+    public function render_quick_search_form(\mod_communityforum\output\quick_search_form $form) {
         return $this->render_from_template('mod_forum/quick_search_form', $form->export_for_template($this));
     }
 
     /**
      * Render big search form.
      *
-     * @param \mod_forum\output\big_search_form $form The renderable.
+     * @param \mod_communityforum\output\big_search_form $form The renderable.
      * @return string
      */
-    public function render_big_search_form(\mod_forum\output\big_search_form $form) {
+    public function render_big_search_form(\mod_communityforum\output\big_search_form $form) {
         return $this->render_from_template('mod_forum/big_search_form', $form->export_for_template($this));
     }
 }

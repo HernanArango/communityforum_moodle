@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\event;
+namespace mod_communityforum\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -83,9 +83,9 @@ class post_deleted extends \core\event\base {
             // Single discussion forums are an exception. We show
             // the forum itself since it only has one discussion
             // thread.
-            $url = new \moodle_url('/mod/forum/view.php', array('f' => $this->other['forumid']));
+            $url = new \moodle_url('/mod/communityforum/view.php', array('f' => $this->other['forumid']));
         } else {
-            $url = new \moodle_url('/mod/forum/discuss.php', array('d' => $this->other['discussionid']));
+            $url = new \moodle_url('/mod/communityforum/discuss.php', array('d' => $this->other['discussionid']));
         }
         return $url;
     }
@@ -96,8 +96,8 @@ class post_deleted extends \core\event\base {
      * @return array|null
      */
     protected function get_legacy_logdata() {
-        // The legacy log table expects a relative path to /mod/forum/.
-        $logurl = substr($this->get_url()->out_as_local_url(), strlen('/mod/forum/'));
+        // The legacy log table expects a relative path to /mod/communityforum/.
+        $logurl = substr($this->get_url()->out_as_local_url(), strlen('/mod/communityforum/'));
 
         return array($this->courseid, 'forum', 'delete post', $logurl, $this->objectid, $this->contextinstanceid);
     }

@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\event;
+namespace mod_communityforum\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -77,7 +77,7 @@ class subscribers_viewed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/forum/subscribers.php', array('id' => $this->other['forumid']));
+        return new \moodle_url('/mod/communityforum/subscribers.php', array('id' => $this->other['forumid']));
     }
 
     /**

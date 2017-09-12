@@ -3241,7 +3241,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
             $url->param('mark', 'read');
             $text = $str->markread;
         }
-        if ($str->displaymode == communityforum_MODE_THREADED) {
+        if ($str->displaymode == COMMUNITYFORUM_MODE_THREADED) {
             $url->param('parent', $post->parent);
         } else {
             $url->set_anchor('p'.$post->id);
@@ -3252,7 +3252,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     // Zoom in to the parent specifically
     if ($post->parent) {
         $url = new moodle_url($discussionlink);
-        if ($str->displaymode == communityforum_MODE_THREADED) {
+        if ($str->displaymode == COMMUNITYFORUM_MODE_THREADED) {
             $url->param('parent', $post->parent);
         } else {
             $url->set_anchor('p'.$post->parent);
@@ -5629,7 +5629,7 @@ function communityforum_print_discussion($course, $cm, $forum, $discussion, $pos
     $posters = array();
 
     // preload all posts - TODO: improve...
-    if ($mode == communityforum_MODE_FLATNEWEST) {
+    if ($mode == COMMUNITYFORUM_MODE_FLATNEWEST) {
         $sort = "p.created DESC";
     } else {
         $sort = "p.created ASC";
@@ -5688,17 +5688,17 @@ function communityforum_print_discussion($course, $cm, $forum, $discussion, $pos
                          '', '', $postread, true, $forumtracked);
 
     switch ($mode) {
-        case communityforum_MODE_FLATOLDEST :
-        case communityforum_MODE_FLATNEWEST :
+        case COMMUNITYFORUM_MODE_FLATOLDEST :
+        case COMMUNITYFORUM_MODE_FLATNEWEST :
         default:
             communityforum_print_posts_flat($course, $cm, $forum, $discussion, $post, $mode, $reply, $forumtracked, $posts);
             break;
 
-        case communityforum_MODE_THREADED :
+        case COMMUNITYFORUM_MODE_THREADED :
             communityforum_print_posts_threaded($course, $cm, $forum, $discussion, $post, 0, $reply, $forumtracked, $posts);
             break;
 
-        case communityforum_MODE_NESTED :
+        case COMMUNITYFORUM_MODE_NESTED :
             communityforum_print_posts_nested($course, $cm, $forum, $discussion, $post, $reply, $forumtracked, $posts);
             break;
     }

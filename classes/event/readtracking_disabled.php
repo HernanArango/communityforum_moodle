@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\event;
+namespace mod_communityforum\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -76,7 +76,7 @@ class readtracking_disabled extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/forum/view.php', array('f' => $this->other['forumid']));
+        return new \moodle_url('/mod/communityforum/view.php', array('f' => $this->other['forumid']));
     }
 
     /**

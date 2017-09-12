@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\event;
+namespace mod_communityforum\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -53,7 +53,7 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/forum/view.php', array('f' => $this->objectid));
+        return new \moodle_url('/mod/communityforum/view.php', array('f' => $this->objectid));
     }
 
     /**

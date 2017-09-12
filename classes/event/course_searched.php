@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_forum\event;
+namespace mod_communityforum\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -78,7 +78,7 @@ class course_searched extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/forum/search.php',
+        return new \moodle_url('/mod/communityforum/search.php',
             array('id' => $this->courseid, 'search' => $this->other['searchterm']));
     }
 
@@ -88,8 +88,8 @@ class course_searched extends \core\event\base {
      * @return array|null
      */
     protected function get_legacy_logdata() {
-        // The legacy log table expects a relative path to /mod/forum/.
-        $logurl = substr($this->get_url()->out_as_local_url(), strlen('/mod/forum/'));
+        // The legacy log table expects a relative path to /mod/communityforum/.
+        $logurl = substr($this->get_url()->out_as_local_url(), strlen('/mod/communityforum/'));
 
         return array($this->courseid, 'forum', 'search', $logurl, $this->other['searchterm']);
     }

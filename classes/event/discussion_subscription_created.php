@@ -78,7 +78,7 @@ class discussion_subscription_created extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/forum/subscribe.php', array(
+        return new \moodle_url('/mod/communityforum/subscribe.php', array(
             'id' => $this->other['forumid'],
             'd' => $this->other['discussion'],
         ));

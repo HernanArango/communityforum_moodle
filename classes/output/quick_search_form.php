@@ -58,7 +58,7 @@ class quick_search_form implements renderable, templatable {
     public function __construct($courseid, $query = '') {
         $this->courseid = $courseid;
         $this->query = $query;
-        $this->actionurl = new moodle_url('/mod/forum/search.php');
+        $this->actionurl = new moodle_url('/mod/communityforum/search.php');
         $this->helpicon = new help_icon('search', 'core');
     }
 
