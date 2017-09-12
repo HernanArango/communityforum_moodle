@@ -18,7 +18,7 @@
 /**
  * Defines backup_forum_activity_task class
  *
- * @package   mod_forum
+ * @package   mod_communityforum
  * @category  backup
  * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,13 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/forum/backup/moodle2/backup_forum_stepslib.php');
-require_once($CFG->dirroot . '/mod/forum/backup/moodle2/backup_forum_settingslib.php');
+require_once($CFG->dirroot . '/mod/communityforum/backup/moodle2/backup_forum_stepslib.php');
+require_once($CFG->dirroot . '/mod/communityforum/backup/moodle2/backup_forum_settingslib.php');
 
 /**
  * Provides the steps to perform one complete backup of the Forum instance
  */
-class backup_forum_activity_task extends backup_activity_task {
+class backup_communityforum_activity_task extends backup_activity_task {
 
     /**
      * No specific settings for this activity
