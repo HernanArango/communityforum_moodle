@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod_forum
+ * @package    mod_communityforum
  * @subpackage backup-moodle2
  * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -29,7 +29,7 @@
 /**
  * Define the complete forum structure for backup, with file and id annotations
  */
-class backup_forum_activity_structure_step extends backup_activity_structure_step {
+class backup_communityforum_activity_structure_step extends backup_activity_structure_step {
 
     protected function define_structure() {
 
@@ -38,7 +38,7 @@ class backup_forum_activity_structure_step extends backup_activity_structure_ste
 
         // Define each element separated
 
-        $forum = new backup_nested_element('forum', array('id'), array(
+        $forum = new backup_nested_element('communityforum', array('id'), array(
             'type', 'name', 'intro', 'introformat',
             'assessed', 'assesstimestart', 'assesstimefinish', 'scale',
             'maxbytes', 'maxattachments', 'forcesubscribe', 'trackingtype',
@@ -121,29 +121,29 @@ class backup_forum_activity_structure_step extends backup_activity_structure_ste
 
         // Define sources
 
-        $forum->set_source_table('forum', array('id' => backup::VAR_ACTIVITYID));
+        $forum->set_source_table('communityforum', array('id' => backup::VAR_ACTIVITYID));
 
         // All these source definitions only happen if we are including user info
         if ($userinfo) {
             $discussion->set_source_sql('
                 SELECT *
-                  FROM {forum_discussions}
+                  FROM {communityforum_discussions}
                  WHERE forum = ?',
                 array(backup::VAR_PARENTID));
 
             // Need posts ordered by id so parents are always before childs on restore
-            $post->set_source_table('forum_posts', array('discussion' => backup::VAR_PARENTID), 'id ASC');
-            $discussionsub->set_source_table('forum_discussion_subs', array('discussion' => backup::VAR_PARENTID));
+            $post->set_source_table('communityforum_posts', array('discussion' => backup::VAR_PARENTID), 'id ASC');
+            $discussionsub->set_source_table('communityforum_discuss_subs', array('discussion' => backup::VAR_PARENTID));
 
-            $subscription->set_source_table('forum_subscriptions', array('forum' => backup::VAR_PARENTID));
-            $digest->set_source_table('forum_digests', array('forum' => backup::VAR_PARENTID));
+            $subscription->set_source_table('communityforum_subscriptions', array('forum' => backup::VAR_PARENTID));
+            $digest->set_source_table('communityforum_digests', array('forum' => backup::VAR_PARENTID));
 
-            $read->set_source_table('forum_read', array('forumid' => backup::VAR_PARENTID));
+            $read->set_source_table('communityforum_read', array('forumid' => backup::VAR_PARENTID));
 
-            $track->set_source_table('forum_track_prefs', array('forumid' => backup::VAR_PARENTID));
+            $track->set_source_table('communityforum_track_prefs', array('forumid' => backup::VAR_PARENTID));
 
             $rating->set_source_table('rating', array('contextid'  => backup::VAR_CONTEXTID,
-                                                      'component'  => backup_helper::is_sqlparam('mod_forum'),
+                                                      'component'  => backup_helper::is_sqlparam('mod_communityforum'),
                                                       'ratingarea' => backup_helper::is_sqlparam('post'),
                                                       'itemid'     => backup::VAR_PARENTID));
             $rating->set_source_alias('rating', 'value');
@@ -173,12 +173,12 @@ class backup_forum_activity_structure_step extends backup_activity_structure_ste
 
         // Define file annotations
 
-        $forum->annotate_files('mod_forum', 'intro', null); // This file area hasn't itemid
+        $forum->annotate_files('mod_communityforum', 'intro', null); // This file area hasn't itemid
 
-        $post->annotate_files('mod_forum', 'post', 'id');
-        $post->annotate_files('mod_forum', 'attachment', 'id');
+        $post->annotate_files('mod_communityforum', 'post', 'id');
+        $post->annotate_files('mod_communityforum', 'attachment', 'id');
 
-        // Return the root element (forum), wrapped into standard activity structure
+        // Return the root element (communityforum), wrapped into standard activity structure
         return $this->prepare_activity_structure($forum);
     }
 

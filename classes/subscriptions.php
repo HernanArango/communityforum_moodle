@@ -428,7 +428,7 @@ class subscriptions {
             if ($includediscussionsubscriptions) {
                 $params['sforumid'] = $forum->id;
                 $params['dsforumid'] = $forum->id;
-                $params['unsubscribed'] = self::FORUM_DISCUSSION_UNSUBSCRIBED;
+                $params['unsubscribed'] = self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED;
 
                 $sql = "SELECT $fields
                         FROM (
@@ -604,14 +604,14 @@ class subscriptions {
                     'userid = :userid AND forum = :forumid AND preference <> :preference', array(
                         'userid' => $userid,
                         'forumid' => $forum->id,
-                        'preference' => self::FORUM_DISCUSSION_UNSUBSCRIBED,
+                        'preference' => self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED,
                     ));
 
             // Reset the subscription caches for this forum.
             // We know that the there were previously entries and there aren't any more.
             if (isset(self::$forumdiscussioncache[$userid]) && isset(self::$forumdiscussioncache[$userid][$forum->id])) {
                 foreach (self::$forumdiscussioncache[$userid][$forum->id] as $discussionid => $preference) {
-                    if ($preference != self::FORUM_DISCUSSION_UNSUBSCRIBED) {
+                    if ($preference != self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                         unset(self::$forumdiscussioncache[$userid][$forum->id][$discussionid]);
                     }
                 }
@@ -667,7 +667,7 @@ class subscriptions {
             if ($userrequest) {
                 $discussionsubscriptions = $DB->get_recordset('forum_discussion_subs', $sqlparams);
                 $DB->delete_records('forum_discussion_subs',
-                        array('userid' => $userid, 'forum' => $forum->id, 'preference' => self::FORUM_DISCUSSION_UNSUBSCRIBED));
+                        array('userid' => $userid, 'forum' => $forum->id, 'preference' => self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED));
 
                 // We know that the there were previously entries and there aren't any more.
                 if (isset(self::$forumdiscussioncache[$userid]) && isset(self::$forumdiscussioncache[$userid][$forum->id])) {
@@ -775,7 +775,7 @@ class subscriptions {
         global $DB;
 
         // First check whether the user's subscription preference for this discussion.
-        $subscription = $DB->get_record('communityforum_discussion_subs', array('userid' => $userid, 'discussion' => $discussion->id));
+        $subscription = $DB->get_record('communityforum_discuss_subs', array('userid' => $userid, 'discussion' => $discussion->id));
         if ($subscription) {
             if ($subscription->preference == self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                 // The user is already unsubscribed from the discussion. Ignore.
@@ -786,7 +786,7 @@ class subscriptions {
         if (!$DB->record_exists('communityforum_subscriptions', array('userid' => $userid, 'forum' => $discussion->forum))) {
             if ($subscription && $subscription->preference != self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED) {
                 // The user is not subscribed to the forum, but subscribed from the discussion, delete the discussion subscription.
-                $DB->delete_records('communityforum_discussion_subs', array('id' => $subscription->id));
+                $DB->delete_records('communityforum_discuss_subs', array('id' => $subscription->id));
                 unset(self::$forumdiscussioncache[$userid][$discussion->forum][$discussion->id]);
             } else {
                 // The user is not subscribed from the forum. Ignore.
@@ -795,7 +795,7 @@ class subscriptions {
         } else {
             if ($subscription) {
                 $subscription->preference = self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED;
-                $DB->update_record('communityforum_discussion_subs', $subscription);
+                $DB->update_record('communityforum_discuss_subs', $subscription);
             } else {
                 $subscription = new \stdClass();
                 $subscription->userid  = $userid;
@@ -803,7 +803,7 @@ class subscriptions {
                 $subscription->discussion = $discussion->id;
                 $subscription->preference = self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED;
 
-                $subscription->id = $DB->insert_record('communityforum_discussion_subs', $subscription);
+                $subscription->id = $DB->insert_record('communityforum_discuss_subs', $subscription);
             }
             self::$forumdiscussioncache[$userid][$discussion->forum][$discussion->id] = $subscription->preference;
         }

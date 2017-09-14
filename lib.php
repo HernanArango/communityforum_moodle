@@ -4578,7 +4578,7 @@ function communityforum_delete_discussion($discussion, $fulldelete, $course, $cm
     communityforum_tp_delete_read_records(-1, -1, $discussion->id);
 
     // Discussion subscriptions must be removed before discussions because of key constraints.
-    $DB->delete_records('communityforum_discussion_subs', array('discussion' => $discussion->id));
+    $DB->delete_records('communityforum_discuss_subs', array('discussion' => $discussion->id));
     if (!$DB->delete_records("communityforum_discussions", array("id" => $discussion->id))) {
         $result = false;
     }
@@ -7027,7 +7027,7 @@ function communityforum_reset_userdata($data) {
     // remove all subscriptions unconditionally - even for users still enrolled in course
     if (!empty($data->reset_communityforum_subscriptions)) {
         $DB->delete_records_select('communityforum_subscriptions', "forum IN ($allforumssql)", $params);
-        $DB->delete_records_select('communityforum_discussion_subs', "forum IN ($allforumssql)", $params);
+        $DB->delete_records_select('communityforum_discuss_subs', "forum IN ($allforumssql)", $params);
         $status[] = array('component' => $componentstr, 'item' => get_string('resetsubscriptions', 'forum'), 'error' => false);
     }
 
