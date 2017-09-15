@@ -52,6 +52,7 @@ if (!is_null($sesskey)) {
     $url->param('sesskey', $sesskey);
 }
 if (!is_null($discussionid)) {
+
     $url->param('d', $discussionid);
     if (!$discussion = $DB->get_record('communityforum_discussions', array('id' => $discussionid, 'forum' => $id))) {
         print_error('invaliddiscussionid', 'communityforum');
@@ -123,7 +124,7 @@ if (!is_null($mode) and has_capability('mod/communityforum:managesubscriptions',
     require_sesskey();
     switch ($mode) {
         case COMMUNITYFORUM_CHOOSESUBSCRIBE : // 0
-            \mod_forum\subscriptions::set_subscription_mode($forum->id, COMMUNITYFORUM_CHOOSESUBSCRIBE);
+            \mod_communityforum\subscriptions::set_subscription_mode($forum->id, COMMUNITYFORUM_CHOOSESUBSCRIBE);
             redirect(
                     $returnto,
                     get_string('everyonecannowchoose', 'communityforum'),

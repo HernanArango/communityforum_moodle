@@ -2221,7 +2221,7 @@ function communityforum_get_user_posts($forumid, $userid) {
 
     $allnames = get_all_user_name_fields(true, 'u');
     return $DB->get_records_sql("SELECT p.*, d.forum, $allnames, u.email, u.picture, u.imagealt
-                              FROM {forum} f
+                              FROM {communityforum} f
                                    JOIN {communityforum_discussions} d ON d.forum = f.id
                                    JOIN {communityforum_posts} p       ON p.discussion = d.id
                                    JOIN {user} u              ON u.id = p.userid
@@ -2290,7 +2290,7 @@ function communityforum_count_user_posts($forumid, $userid) {
     }
 
     return $DB->get_record_sql("SELECT COUNT(p.id) AS postcount, MAX(p.modified) AS lastpost
-                             FROM {forum} f
+                             FROM {communityforum} f
                                   JOIN {communityforum_discussions} d ON d.forum = f.id
                                   JOIN {communityforum_posts} p       ON p.discussion = d.id
                                   JOIN {user} u              ON u.id = p.userid
@@ -2316,7 +2316,7 @@ function communityforum_get_post_from_log($log) {
         return $DB->get_record_sql("SELECT p.*, f.type AS forumtype, d.forum, d.groupid, $allnames, u.email, u.picture
                                  FROM {communityforum_discussions} d,
                                       {communityforum_posts} p,
-                                      {forum} f,
+                                      {communityforum} f,
                                       {user} u
                                 WHERE p.id = ?
                                   AND d.id = p.discussion
@@ -2330,7 +2330,7 @@ function communityforum_get_post_from_log($log) {
         return $DB->get_record_sql("SELECT p.*, f.type AS forumtype, d.forum, d.groupid, $allnames, u.email, u.picture
                                  FROM {communityforum_discussions} d,
                                       {communityforum_posts} p,
-                                      {forum} f,
+                                      {communityforum} f,
                                       {user} u
                                 WHERE d.id = ?
                                   AND d.firstpost = p.id
@@ -2443,7 +2443,7 @@ function communityforum_count_discussions($forum, $cm, $course) {
         }
 
         $sql = "SELECT f.id, COUNT(d.id) as dcount
-                  FROM {forum} f
+                  FROM {communityforum} f
                        JOIN {communityforum_discussions} d ON d.forum = f.id
                  WHERE f.course = ?
                        $timedsql
@@ -3865,17 +3865,17 @@ function communityforum_get_discussion_subscription_icon($forum, $discussionid, 
     ));
 
     if ($includetext) {
-        $o .= $subscriptionstatus ? get_string('subscribed', 'mod_communityforum') : get_string('notsubscribed', 'mod_communityforum');
+        $o .= $subscriptionstatus ? get_string('subscribed', 'mod_communityforum') : get_string('notsubscribed', 'communityforum');
     }
 
     if ($subscriptionstatus) {
-        $output = $OUTPUT->pix_icon('t/subscribed', get_string('clicktounsubscribe', 'forum'), 'mod_communityforum');
+        $output = $OUTPUT->pix_icon('t/subscribed', get_string('clicktounsubscribe', 'communityforum'), 'mod_communityforum');
         if ($includetext) {
-            $output .= get_string('subscribed', 'mod_communityforum');
+            $output .= get_string('subscribed', 'communityforum');
         }
 
         return html_writer::link($subscriptionlink, $output, array(
-                'title' => get_string('clicktounsubscribe', 'forum'),
+                'title' => get_string('clicktounsubscribe', 'communityforum'),
                 'class' => 'discussiontoggle iconsmall',
                 'data-forumid' => $forum->id,
                 'data-discussionid' => $discussionid,
@@ -3883,13 +3883,13 @@ function communityforum_get_discussion_subscription_icon($forum, $discussionid, 
             ));
 
     } else {
-        $output = $OUTPUT->pix_icon('t/unsubscribed', get_string('clicktosubscribe', 'forum'), 'mod_communityforum');
+        $output = $OUTPUT->pix_icon('t/unsubscribed', get_string('clicktosubscribe', 'communityforum'), 'mod_communityforum');
         if ($includetext) {
-            $output .= get_string('notsubscribed', 'mod_communityforum');
+            $output .= get_string('notsubscribed', 'communityforum');
         }
 
         return html_writer::link($subscriptionlink, $output, array(
-                'title' => get_string('clicktosubscribe', 'forum'),
+                'title' => get_string('clicktosubscribe', 'communityforum'),
                 'class' => 'discussiontoggle iconsmall',
                 'data-forumid' => $forum->id,
                 'data-discussionid' => $discussionid,
@@ -5877,7 +5877,7 @@ function communityforum_get_recent_mod_activity(&$activities, &$index, $timestar
                                               $allnames, u.email, u.picture, u.imagealt, u.email
                                          FROM {communityforum_posts} p
                                               JOIN {communityforum_discussions} d ON d.id = p.discussion
-                                              JOIN {forum} f             ON f.id = d.forum
+                                              JOIN {communityforum} f             ON f.id = d.forum
                                               JOIN {user} u              ON u.id = p.userid
                                         WHERE p.created > ? AND f.id = ?
                                               $userselect $groupselect
@@ -6140,7 +6140,7 @@ function communityforum_tp_mark_posts_read($user, $postids) {
             SELECT :userid1, p.id, p.discussion, d.forum, :firstread, :lastread
                 FROM {communityforum_posts} p
                     JOIN {communityforum_discussions} d       ON d.id = p.discussion
-                    JOIN {forum} f                   ON f.id = d.forum
+                    JOIN {communityforum} f                   ON f.id = d.forum
                     LEFT JOIN {communityforum_track_prefs} tf ON (tf.userid = :userid2 AND tf.forumid = f.id)
                     LEFT JOIN {communityforum_read} fr        ON (
                             fr.userid = :userid3
@@ -6343,7 +6343,7 @@ function communityforum_tp_get_course_unread_posts($userid, $courseid) {
     $sql = "SELECT f.id, COUNT(p.id) AS unread
               FROM {communityforum_posts} p
                    JOIN {communityforum_discussions} d       ON d.id = p.discussion
-                   JOIN {forum} f                   ON f.id = d.forum
+                   JOIN {communityforum} f                   ON f.id = d.forum
                    JOIN {course} c                  ON c.id = f.course
                    LEFT JOIN {communityforum_read} r         ON (r.postid = p.id AND r.userid = ?)
                    LEFT JOIN {communityforum_track_prefs} tf ON (tf.userid = ? AND tf.forumid = f.id)
@@ -6504,7 +6504,7 @@ function communityforum_tp_get_untracked_forums($userid, $courseid) {
     }
 
     $sql = "SELECT f.id
-              FROM {forum} f
+              FROM {communityforum} f
                    LEFT JOIN {communityforum_track_prefs} ft ON (ft.forumid = f.id AND ft.userid = ?)
              WHERE f.course = ?
                    $trackingsql";
@@ -6870,7 +6870,7 @@ function communityforum_reset_gradebook($courseid, $type='') {
     }
 
     $sql = "SELECT f.*, cm.idnumber as cmidnumber, f.course as courseid
-              FROM {forum} f, {course_modules} cm, {modules} m
+              FROM {communityforum} f, {course_modules} cm, {modules} m
              WHERE m.name='forum' AND m.id=cm.module AND cm.instance=f.id AND f.course=? $wheresql";
 
     if ($forums = $DB->get_records_sql($sql, $params)) {
@@ -6925,15 +6925,15 @@ function communityforum_reset_userdata($data) {
         $typesstr = get_string('resetforums', 'forum').': '.implode(', ', $types);
     }
     $alldiscussionssql = "SELECT fd.id
-                            FROM {communityforum_discussions} fd, {forum} f
+                            FROM {communityforum_discussions} fd, {communityforum} f
                            WHERE f.course=? AND f.id=fd.forum";
 
     $allforumssql      = "SELECT f.id
-                            FROM {forum} f
+                            FROM {communityforum} f
                            WHERE f.course=?";
 
     $allpostssql       = "SELECT fp.id
-                            FROM {communityforum_posts} fp, {communityforum_discussions} fd, {forum} f
+                            FROM {communityforum_posts} fp, {communityforum_discussions} fd, {communityforum} f
                            WHERE f.course=? AND f.id=fd.forum AND fd.id=fp.discussion";
 
     $forumssql = $forums = $rm = null;
@@ -7406,12 +7406,12 @@ function communityforum_get_forums_user_posted_in($user, array $courseids = null
     }
 
     $sql = "SELECT f.*, cm.id AS cmid
-              FROM {forum} f
+              FROM {communityforum} f
               JOIN {course_modules} cm ON cm.instance = f.id
               JOIN {modules} m ON m.id = cm.module
               JOIN (
                   SELECT f.id
-                    FROM {forum} f
+                    FROM {communityforum} f
                     {$join}
                    WHERE ff.userid = :userid
                 GROUP BY f.id

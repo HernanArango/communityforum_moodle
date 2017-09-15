@@ -360,8 +360,8 @@ class subscriptions {
         $sql = "SELECT
                     f.id AS forumid,
                     s.id AS subscriptionid
-                FROM {forum} f
-                LEFT JOIN {forum_subscriptions} s ON (s.forum = f.id AND s.userid = :userid)
+                FROM {communityforum} f
+                LEFT JOIN {communityforum_subscriptions} s ON (s.forum = f.id AND s.userid = :userid)
                 WHERE f.course = :course
                 AND f.forcesubscribe <> :subscriptionforced";
 

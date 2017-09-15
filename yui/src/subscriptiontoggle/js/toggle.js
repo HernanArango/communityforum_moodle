@@ -18,14 +18,14 @@
  * active.
  *
  * @module     moodle-core-subscriptiontoggle
- * @package    mod_forum
+ * @package    mod_communityforum
  * @copyright  2014 Andrew Nicols <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @main       moodle-mod_forum-subscriptiontoggle
+ * @main       moodle-mod_communityforum-subscriptiontoggle
  */
 
 /**
- * @namespace M.mod_forum
+ * @namespace M.mod_communityforum
  * @class subscriptiontoggle
  */
 
@@ -33,7 +33,7 @@ function SubscriptionToggle() {
     SubscriptionToggle.superclass.constructor.apply(this, arguments);
 }
 
-var LOGNAME = 'moodle-mod_forum-subscriptiontoggle';
+var LOGNAME = 'moodle-mod_communityforum-subscriptiontoggle';
 
 Y.extend(SubscriptionToggle, Y.Base, {
     initializer: function() {
@@ -100,15 +100,15 @@ Y.extend(SubscriptionToggle, Y.Base, {
          *
          * @attribute uri
          * @type String
-         * @default M.cfg.wwwroot + '/mod/forum/subscribe_ajax.php'
+         * @default M.cfg.wwwroot + '/mod/communityforum/subscribe_ajax.php'
          */
         uri: {
-            value: M.cfg.wwwroot + '/mod/forum/subscribe_ajax.php'
+            value: M.cfg.wwwroot + '/mod/communityforum/subscribe_ajax.php'
         }
     }
 });
 
-var NS = Y.namespace('M.mod_forum.subscriptiontoggle');
+var NS = Y.namespace('M.mod_communityforum.subscriptiontoggle');
 NS.init = function(config) {
     return new SubscriptionToggle(config);
 };
