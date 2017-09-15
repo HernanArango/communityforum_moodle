@@ -7969,18 +7969,18 @@ function mod_communityforum_myprofile_navigation(core_user\output\myprofile\tree
     if (!empty($course)) {
         $postsurl->param('course', $course->id);
     }
-    $string = get_string('forumposts', 'mod_communityforum');
-    $node = new core_user\output\myprofile\node('miscellaneous', 'forumposts', $string, null, $postsurl);
-    $tree->add_node($node);
+    //$string = get_string('forumposts', 'mod_communityforum');
+    //$node = new core_user\output\myprofile\node('miscellaneous', 'forumposts', $string, null, $postsurl);
+    //$tree->add_node($node);
 
     $discussionssurl = new moodle_url('/mod/communityforum/user.php', array('id' => $user->id, 'mode' => 'discussions'));
     if (!empty($course)) {
         $discussionssurl->param('course', $course->id);
     }
-    $string = get_string('myprofileotherdis', 'mod_communityforum');
-    $node = new core_user\output\myprofile\node('miscellaneous', 'forumdiscussions', $string, null,
-        $discussionssurl);
-    $tree->add_node($node);
+    //$string = get_string('myprofileotherdis', 'mod_communityforum');
+    //$node = new core_user\output\myprofile\node('miscellaneous', 'forumdiscussions', $string, null,
+    //    $discussionssurl);
+    //$tree->add_node($node);
 
     return true;
 }
