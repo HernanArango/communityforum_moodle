@@ -175,7 +175,7 @@ function communityforum_update_instance($forum, $mform) {
         $forum->assesstimefinish = 0;
     }
 
-    $oldforum = $DB->get_record('forum', array('id'=>$forum->id));
+    $oldforum = $DB->get_record('communityforum', array('id'=>$forum->id));
 
     // MDL-3942 - if the aggregation type or scale (i.e. max grade) changes then recalculate the grades for the entire forum
     // if  scale changes - do we need to recheck the ratings, if ratings higher than scale how do we want to respond?
@@ -188,7 +188,7 @@ function communityforum_update_instance($forum, $mform) {
         $discussions = $DB->get_records('communityforum_discussions', array('forum'=>$forum->id), 'timemodified ASC');
         if (!empty($discussions)) {
             if (count($discussions) > 1) {
-                echo $OUTPUT->notification(get_string('warnformorepost', 'forum'));
+                echo $OUTPUT->notification(get_string('warnformorepost', 'communityforum'));
             }
             $discussion = array_pop($discussions);
         } else {
@@ -209,7 +209,7 @@ function communityforum_update_instance($forum, $mform) {
             communityforum_add_discussion($discussion, null, $message);
 
             if (! $discussion = $DB->get_record('communityforum_discussions', array('forum'=>$forum->id))) {
-                print_error('cannotadd', 'forum');
+                print_error('cannotadd', 'communityforum');
             }
         }
         if (! $post = $DB->get_record('communityforum_posts', array('id'=>$discussion->firstpost))) {
@@ -238,7 +238,7 @@ function communityforum_update_instance($forum, $mform) {
         $DB->update_record('communityforum_discussions', $discussion);
     }
 
-    $DB->update_record('forum', $forum);
+    $DB->update_record('communityforum', $forum);
 
     $modcontext = context_module::instance($forum->coursemodule);
     if (($forum->forcesubscribe == COMMUNITYFORUM_INITIALSUBSCRIBE) && ($oldforum->forcesubscribe <> $forum->forcesubscribe)) {
@@ -266,10 +266,10 @@ function communityforum_update_instance($forum, $mform) {
 function communityforum_delete_instance($id) {
     global $DB;
 
-    if (!$forum = $DB->get_record('forum', array('id'=>$id))) {
+    if (!$forum = $DB->get_record('communityforum', array('id'=>$id))) {
         return false;
     }
-    if (!$cm = get_coursemodule_from_instance('forum', $forum->id)) {
+    if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id)) {
         return false;
     }
     if (!$course = $DB->get_record('course', array('id'=>$cm->course))) {
