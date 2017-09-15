@@ -116,13 +116,13 @@ class mod_communityforum_post_form extends moodleform {
 
         $manageactivities = has_capability('moodle/course:manageactivities', $coursecontext);
 
-        if (\mod_forum\subscriptions::is_forcesubscribed($forum)) {
+        if (\mod_communityforum\subscriptions::is_forcesubscribed($forum)) {
             $mform->addElement('checkbox', 'discussionsubscribe', get_string('discussionsubscription', 'forum'));
             $mform->freeze('discussionsubscribe');
             $mform->setDefaults('discussionsubscribe', 0);
             $mform->addHelpButton('discussionsubscribe', 'forcesubscribed', 'forum');
 
-        } else if (\mod_forum\subscriptions::subscription_disabled($forum) && !$manageactivities) {
+        } else if (\mod_communityforum\subscriptions::subscription_disabled($forum) && !$manageactivities) {
             $mform->addElement('checkbox', 'discussionsubscribe', get_string('discussionsubscription', 'forum'));
             $mform->freeze('discussionsubscribe');
             $mform->setDefaults('discussionsubscribe', 0);
@@ -133,12 +133,12 @@ class mod_communityforum_post_form extends moodleform {
             $mform->addHelpButton('discussionsubscribe', 'discussionsubscription', 'forum');
         }
 
-        if (!empty($forum->maxattachments) && $forum->maxbytes != 1 && has_capability('mod/forum:createattachment', $modcontext))  {  //  1 = No attachments at all
+        if (!empty($forum->maxattachments) && $forum->maxbytes != 1 && has_capability('mod/communityforum:createattachment', $modcontext))  {  //  1 = No attachments at all
             $mform->addElement('filemanager', 'attachments', get_string('attachment', 'forum'), null, self::attachment_options($forum));
             $mform->addHelpButton('attachments', 'attachment', 'forum');
         }
 
-        if (!$post->parent && has_capability('mod/forum:pindiscussions', $modcontext)) {
+        if (!$post->parent && has_capability('mod/communityforum:pindiscussions', $modcontext)) {
             $mform->addElement('checkbox', 'pinned', get_string('discussionpinned', 'forum'));
             $mform->addHelpButton('pinned', 'discussionpinned', 'forum');
         }
@@ -221,7 +221,7 @@ class mod_communityforum_post_form extends moodleform {
             }
         }
 
-        if (!empty($CFG->forum_enabletimedposts) && !$post->parent && has_capability('mod/forum:viewhiddentimedposts', $coursecontext)) {
+        if (!empty($CFG->forum_enabletimedposts) && !$post->parent && has_capability('mod/communityforum:viewhiddentimedposts', $coursecontext)) {
             $mform->addElement('header', 'displayperiod', get_string('displayperiod', 'forum'));
 
             $mform->addElement('date_time_selector', 'timestart', get_string('displaystart', 'forum'), array('optional' => true));

@@ -368,7 +368,7 @@ class subscriptions {
         $subscriptions = $DB->get_recordset_sql($sql, array(
             'course' => $courseid,
             'userid' => $userid,
-            'subscriptionforced' => FORUM_FORCESUBSCRIBE,
+            'subscriptionforced' => COMMUNITYFORUM_FORCESUBSCRIBE,
         ));
 
         foreach ($subscriptions as $id => $data) {
