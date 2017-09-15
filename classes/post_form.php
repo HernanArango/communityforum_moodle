@@ -174,7 +174,7 @@ class mod_communityforum_post_form extends moodleform {
             $canposttoowngroups = $canposttoowngroups && empty($post->parent);
 
             // 3) You also need the canposttoowngroups capability.
-            $canposttoowngroups = $canposttoowngroups && has_capability('mod/forum:canposttomygroups', $modcontext);
+            $canposttoowngroups = $canposttoowngroups && has_capability('mod/communityforum:canposttomygroups', $modcontext);
             if ($canposttoowngroups) {
                 // This user is in multiple groups, and can post to all of their own groups.
                 // Note: This is not the same as accessallgroups. This option will copy a post to all groups that a
@@ -202,7 +202,7 @@ class mod_communityforum_post_form extends moodleform {
             // 2) This is editing of an existing post and the user is allowed to movediscussions.
             // We allow this because the post may have been moved from another forum where groups are not available.
             // We show this even if no groups are available as groups *may* have been available but now are not.
-            $canselectgroupformove = $groupcount && !empty($post->edit) && has_capability('mod/forum:movediscussions', $modcontext);
+            $canselectgroupformove = $groupcount && !empty($post->edit) && has_capability('mod/communityforum:movediscussions', $modcontext);
 
             // Important: You can *only* change the group for a top level post. Never any reply.
             $canselectgroup = empty($post->parent) && ($canselectgroupfornew || $canselectgroupformove);
