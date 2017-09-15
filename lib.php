@@ -7162,7 +7162,7 @@ function communityforum_get_extra_capabilities() {
 function communityforum_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $forumnode) {
     global $USER, $PAGE, $CFG, $DB, $OUTPUT;
 
-    $forumobject = $DB->get_record("forum", array("id" => $PAGE->cm->instance));
+    $forumobject = $DB->get_record("communityforum", array("id" => $PAGE->cm->instance));
     if (empty($PAGE->cm->context)) {
         $PAGE->cm->context = context_module::instance($PAGE->cm->instance);
     }
@@ -7933,7 +7933,7 @@ function communityforum_discussion_view($modcontext, $forum, $discussion) {
 function communityforum_discussion_pin($modcontext, $forum, $discussion) {
     global $DB;
 
-    $DB->set_field('communityforum_discussions', 'pinned', communityforum_DISCUSSION_PINNED, array('id' => $discussion->id));
+    $DB->set_field('communityforum_discussions', 'pinned', COMMUNITYFORUM_DISCUSSION_PINNED, array('id' => $discussion->id));
 
     $params = array(
         'context' => $modcontext,
@@ -7957,7 +7957,7 @@ function communityforum_discussion_pin($modcontext, $forum, $discussion) {
 function communityforum_discussion_unpin($modcontext, $forum, $discussion) {
     global $DB;
 
-    $DB->set_field('communityforum_discussions', 'pinned', communityforum_DISCUSSION_UNPINNED, array('id' => $discussion->id));
+    $DB->set_field('communityforum_discussions', 'pinned', COMMUNITYFORUM_DISCUSSION_PINNED, array('id' => $discussion->id));
 
     $params = array(
         'context' => $modcontext,
