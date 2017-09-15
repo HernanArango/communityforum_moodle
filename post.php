@@ -109,11 +109,11 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     if (! $cm = get_coursemodule_from_instance("communityforum", $forum->id, $course->id)) {
         print_error("invalidcoursemodule");
     }
-
+    
     // Retrieve the contexts.
     $modcontext    = context_module::instance($cm->id);
     $coursecontext = context_course::instance($course->id);
-
+    
     if (! communityforum_user_can_post_discussion($forum, $groupid, -1, $cm)) {
         if (!isguestuser()) {
             if (!is_enrolled($coursecontext)) {
@@ -128,13 +128,13 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
         }
         print_error('nopostforum', 'communityforum');
     }
-
+    
     if (!$cm->visible and !has_capability('moodle/course:viewhiddenactivities', $modcontext)) {
         print_error("activityiscurrentlyhidden");
     }
 
     $SESSION->fromurl = get_local_referer(false);
-
+    
     // Load up the $post variable.
 
     $post = new stdClass();
@@ -147,18 +147,18 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     $post->message       = '';
     $post->messageformat = editors_get_preferred_format();
     $post->messagetrust  = 0;
-
+    
     if (isset($groupid)) {
         $post->groupid = $groupid;
     } else {
         $post->groupid = groups_get_activity_group($cm);
     }
-
+    
     // Unsetting this will allow the correct return URL to be calculated later.
     unset($SESSION->fromdiscussion);
-
+    
 } else if (!empty($reply)) {      // User is writing a new reply
-
+    
     if (! $parent = communityforum_get_post_full($reply)) {
         print_error('invalidparentpostid', 'communityforum');
     }
@@ -237,7 +237,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     unset($SESSION->fromdiscussion);
 
 } else if (!empty($edit)) {  // User is editing their own post
-
+    
     if (! $post = communityforum_get_post_full($edit)) {
         print_error('invalidpostid', 'communityforum');
     }
@@ -568,7 +568,7 @@ $mform_post = new mod_communityforum_post_form('post.php', array('course' => $co
                                                                 null, $cm),
                                                         'thresholdwarning' => $thresholdwarning,
                                                         'edit' => $edit), 'post', '', array('id' => 'mformforum'));
-
+                                                                                                           
 $draftitemid = file_get_submitted_draft_itemid('attachments');
 file_prepare_draft_area($draftitemid, $modcontext->id, 'mod_communityforum', 'attachment', empty($post->id)?null:$post->id, mod_communityforum_post_form::attachment_options($forum));
 
