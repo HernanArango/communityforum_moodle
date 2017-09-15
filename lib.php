@@ -4389,8 +4389,8 @@ function communityforum_add_new_post($post, $mform, $unused = null) {
     global $USER, $DB;
 
     $discussion = $DB->get_record('communityforum_discussions', array('id' => $post->discussion));
-    $forum      = $DB->get_record('forum', array('id' => $discussion->forum));
-    $cm         = get_coursemodule_from_instance('forum', $forum->id);
+    $forum      = $DB->get_record('communityforum', array('id' => $discussion->forum));
+    $cm         = get_coursemodule_from_instance('communityforum', $forum->id);
     $context    = context_module::instance($cm->id);
 
     $post->created    = $post->modified = time();
@@ -7861,11 +7861,11 @@ function communityforum_get_context($forumid, $context = null) {
 
     if (!$context || !($context instanceof context_module)) {
         // Find out forum context. First try to take current page context to save on DB query.
-        if ($PAGE->cm && $PAGE->cm->modname === 'forum' && $PAGE->cm->instance == $forumid
+        if ($PAGE->cm && $PAGE->cm->modname === 'communityforum' && $PAGE->cm->instance == $forumid
                 && $PAGE->context->contextlevel == CONTEXT_MODULE && $PAGE->context->instanceid == $PAGE->cm->id) {
             $context = $PAGE->context;
         } else {
-            $cm = get_coursemodule_from_instance('forum', $forumid);
+            $cm = get_coursemodule_from_instance('commmunityforum', $forumid);
             $context = \context_module::instance($cm->id);
         }
     }
