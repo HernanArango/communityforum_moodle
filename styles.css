@@ -25,73 +25,89 @@
  *             div.footer
  */
 
-.forumpost {
+ .path-mod-communityforum .forumpost {
+    background-color: #ffffff;
     display: block;
     position: relative;
     margin: 0 0 1em 0;
-    padding: 0;
-    border: 1px solid #000;
-    max-width: 100%;
+    padding: 17px 0px 0px 7px;
+    border-radius: 0px;
+    border: none;
+    border-top: 1px solid #e9e9e9;
+    max-width: 70%;
 }
 
-.forumpost .row {
+.path-mod-communityforum .forumpost .row {
     width: 100%;
     position: relative;
 }
 
-.forumpost .row .left {
+.path-mod-communityforum .forumpost .row .left {
     float: left;
-    width: 43px;
     overflow: hidden;
+    width: 76px;
 }
 
-.forumpost .row .left .grouppictures a {
+
+.path-mod-communityforum .forumpost .row .left .grouppictures a {
     text-align: center;
     display: block;
     margin: 6px 2px 0 2px;
 }
 
-.forumpost .row .left .grouppicture {
+.path-mod-communityforum .forumpost .row .left .grouppicture {
     width: 20px;
     height: 20px;
 }
 
-.forumpost .row .topic,
-.forumpost .row .content-mask,
-.forumpost .row .options {
+.path-mod-communityforum .forumpost .author  {
+    color: #93a2aa;
+}
+
+.path-mod-communityforum .forumpost .author a {
+    color: #497E99;
+    text-decoration: none;
+}
+
+.path-mod-communityforum .forumpost .row .topic,
+.path-mod-communityforum .forumpost .row .content-mask,
+.path-mod-communityforum .forumpost .row .options {
     margin-left: 43px;
 }
 
-.forumpost .picture img {
+.path-mod-communityforum .forumpost .picture img {
     margin: 4px;
+    height: 58px;
+    width: 58px;
+    
 }
 
-.forumpost .options .commands,
-.forumpost .content .attachments,
-.forumpost .options .footer,
-.forumpost .options .link {
+.path-mod-communityforum .forumpost .options .commands,
+.path-mod-communityforum .forumpost .content .attachments,
+.path-mod-communityforum .forumpost .options .footer,
+.path-mod-communityforum .forumpost .options .link {
     text-align: right;
 }
 
-.forumpost .options .forum-post-rating {
+.path-mod-communityforum .forumpost .options .forum-post-rating {
     float: left;
 }
 
-.forumpost .content .posting {
+.path-mod-communityforum .forumpost .content .posting {
     overflow: auto;
     max-width: 100%;
 }
 
-.forumpost .content .attachedimages img {
+.path-mod-communityforum .forumpost .content .attachedimages img {
     max-width: 100%;
 }
 
-.forumpost .post-word-count {
+.path-mod-communityforum .forumpost .post-word-count {
     font-size: .85em;
     font-style: italic;
 }
 
-.forumpost .shortenedpost .post-word-count {
+.path-mod-communityforum .forumpost .shortenedpost .post-word-count {
     display: inline;
     padding: 0 .3em;
 }
@@ -242,13 +258,13 @@
 
 /* Forumpost unread
 -------------------------*/
-.forumpost.unread .row.header,
+.path-mod-communityforum .forumpost.unread .row.header,
 .path-course-view .unread,
 span.unread {
     background-color: #ffd;
 }
 
-.forumpost.unread .row.header {
+.path-mod-communityforum .forumpost.unread .row.header {
     border-bottom: 1px solid #ddd;
 }
 
@@ -319,4 +335,15 @@ span.unread {
 
 #page-mod-communityforum-view img.timedpost {
     margin-right: 5px;
+}
+
+
+.path-mod-communityforum .link_control_foro{
+    font-size: 1.3em;
+    color: #919191;
+    margin-left: 27px;
+}
+
+.path-mod-communityforum .commands{
+    margin-top: 25px;
 }

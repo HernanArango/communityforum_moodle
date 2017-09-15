@@ -234,7 +234,7 @@ class mod_communityforum_renderer extends plugin_renderer_base {
      * @return string
      */
     public function render_quick_search_form(\mod_communityforum\output\quick_search_form $form) {
-        return $this->render_from_template('mod_forum/quick_search_form', $form->export_for_template($this));
+        return $this->render_from_template('mod_communityforum/quick_search_form', $form->export_for_template($this));
     }
 
     /**
@@ -244,6 +244,6 @@ class mod_communityforum_renderer extends plugin_renderer_base {
      * @return string
      */
     public function render_big_search_form(\mod_communityforum\output\big_search_form $form) {
-        return $this->render_from_template('mod_forum/big_search_form', $form->export_for_template($this));
+        return $this->render_from_template('mod_communityforum/big_search_form', $form->export_for_template($this));
     }
 }

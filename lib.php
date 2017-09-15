@@ -3353,7 +3353,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     // User picture.
     if (!$authorhidden) {
         $picture = $OUTPUT->user_picture($postuser, ['courseid' => $course->id]);
-        $output .= html_writer::div($picture, 'left picture');
+        $output .= html_writer::div($picture, 'left picture size-content-picture');
         $topicclass = 'topic' . $topicclass;
     }
 
@@ -3387,7 +3387,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     // Row with the forum post content.
     $output .= html_writer::start_div('row maincontent clearfix');
     // Show if author is not hidden or we have groups.
-    if (!$authorhidden || $groups) {
+    /*if (!$authorhidden || $groups) {
         $output .= html_writer::start_div('left');
         $groupoutput = '';
         if ($groups) {
@@ -3398,7 +3398,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
         }
         $output .= html_writer::div($groupoutput, 'grouppictures');
         $output .= html_writer::end_div(); // Left side.
-    }
+    }*/
 
     $output .= html_writer::start_tag('div', array('class'=>'no-overflow'));
     $output .= html_writer::start_tag('div', array('class'=>'content'));
@@ -3452,12 +3452,13 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     $commandhtml = array();
     foreach ($commands as $command) {
         if (is_array($command)) {
-            $commandhtml[] = html_writer::link($command['url'], $command['text']);
+            $commandhtml[] = html_writer::link($command['url'], communityforum_get_icon($command['text']),['class'=>'link_control_foro']);
+           
         } else {
             $commandhtml[] = $command;
         }
     }
-    $output .= html_writer::tag('div', implode(' | ', $commandhtml), array('class'=>'commands'));
+    $output .= html_writer::tag('div', implode('', $commandhtml), array('class'=>'commands'));
 
     // Output link to post if required
     if ($link) {
@@ -3507,6 +3508,26 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     }
     echo $output;
     return;
+}
+
+/**
+*
+* asignamos un icono para los link de control (Editar,borrar foro etc)
+*/
+function communityforum_get_icon($text) {
+    switch ($text) {
+        case "Editar":
+            $text = "<i class='fa fa-pencil' aria-hidden='true'></i>".$text;
+            break;
+        case "Borrar":
+            $text = "<i class='fa fa-trash' aria-hidden='true'></i>".$text;
+            break;
+        case "Responder":
+            $text = "<i class='fa fa-reply' aria-hidden='true'></i>".$text;
+            break;
+        
+    }
+    return $text;
 }
 
 /**
