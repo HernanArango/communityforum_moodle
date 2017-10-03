@@ -2522,7 +2522,7 @@ function communityforum_count_discussions($forum, $cm, $course) {
  * @param int $updatedsince retrieve only discussions updated since the given time
  * @return array
  */
-function communityforum_get_discussions($cm, $forumsort="", $fullpost=true, $unused=-1, $limit=-1,
+function communityforum_get_discussions($cm, $category,$forumsort="", $fullpost=true, $unused=-1, $limit=-1,
                                 $userlastmodified=false, $page=-1, $perpage=0, $groupid = -1,
                                 $updatedsince = 0) {
     global $CFG, $DB, $USER;
@@ -2530,7 +2530,7 @@ function communityforum_get_discussions($cm, $forumsort="", $fullpost=true, $unu
     $timelimit = '';
 
     $now = round(time(), -2);
-    $params = array($cm->instance);
+    $params = array($cm->instance,$category);
 
     $modcontext = context_module::instance($cm->id);
 
@@ -2648,10 +2648,10 @@ function communityforum_get_discussions($cm, $forumsort="", $fullpost=true, $unu
                    JOIN {communityforum_posts} p ON p.discussion = d.id
                    JOIN {user} u ON p.userid = u.id
                    $umtable
-             WHERE d.forum = ? AND p.parent = 0
+             WHERE d.forum = ? AND d.category = ? AND p.parent = 0
                    $timelimit $groupselect $updatedsincesql
           ORDER BY $forumsort, d.id DESC";
-
+          
     return $DB->get_records_sql($sql, $params, $limitfrom, $limitnum);
 }
 
@@ -2920,11 +2920,11 @@ function communityforum_get_discussions_unread($cm) {
  * @param object $cm
  * @return array
  */
-function communityforum_get_discussions_count($cm) {
+function communityforum_get_discussions_count($cm,$category) {
     global $CFG, $DB, $USER;
 
     $now = round(time(), -2);
-    $params = array($cm->instance);
+    $params = array($cm->instance,$category);
     $groupmode    = groups_get_activity_groupmode($cm);
     $currentgroup = groups_get_activity_group($cm);
 
@@ -2973,7 +2973,7 @@ function communityforum_get_discussions_count($cm) {
     $sql = "SELECT COUNT(d.id)
               FROM {communityforum_discussions} d
                    JOIN {communityforum_posts} p ON p.discussion = d.id
-             WHERE d.forum = ? AND p.parent = 0
+             WHERE d.forum = ? AND d.category= ? AND p.parent = 0
                    $groupselect $timelimit";
 
     return $DB->get_field_sql($sql, $params);
@@ -3454,7 +3454,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     foreach ($commands as $command) {
         if (is_array($command)) {
             $commandhtml[] = html_writer::link($command['url'], communityforum_get_icon($command['text']),['class'=>'link_control_foro']);
-           
+
         } else {
             $commandhtml[] = $command;
         }
@@ -3513,7 +3513,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
 
 /**
 *
-* asignamos un icono para los link de control (Editar,borrar foro etc)
+* Asignamos un icono para los link de control (Editar,borrar foro etc)
 */
 function communityforum_get_icon($text) {
     switch ($text) {
@@ -3526,7 +3526,9 @@ function communityforum_get_icon($text) {
         case "Responder":
             $text = "<i class='fa fa-reply' aria-hidden='true'></i>".$text;
             break;
-        
+        case "Enlace permanente":
+            $text = "<i class='fa fa-link' aria-hidden='true'></i>".$text;
+            break;
     }
     return $text;
 }
@@ -5329,7 +5331,7 @@ function communityforum_user_can_see_post($forum, $discussion, $post, $user=NULL
  * @param boolean $subscriptionstatus Whether the user is currently subscribed to the discussion in some fashion.
  *
  */
-function communityforum_print_latest_discussions($course, $forum, $maxdiscussions = -1, $displayformat = 'plain', $sort = '',
+function communityforum_print_latest_discussions($course, $forum, $category,$maxdiscussions = -1, $displayformat = 'plain', $sort = '',
                                         $currentgroup = -1, $groupmode = -1, $page = -1, $perpage = 100, $cm = null) {
     global $CFG, $USER, $OUTPUT;
 
@@ -5411,7 +5413,7 @@ function communityforum_print_latest_discussions($course, $forum, $maxdiscussion
                 $buttonadd = get_string('addanewdiscussion', 'forum');
                 break;
         }
-        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['forum' => $forum->id]), $buttonadd, 'get');
+        $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['forum' => $forum->id,'category' => $category]), $buttonadd, 'get');
         $button->class = 'singlebutton forumaddnew';
         $button->formid = 'newdiscussionform';
         echo $OUTPUT->render($button);
@@ -5434,7 +5436,7 @@ function communityforum_print_latest_discussions($course, $forum, $maxdiscussion
 
     $getuserlastmodified = ($displayformat == 'header');
 
-    if (! $discussions = communityforum_get_discussions($cm, $sort, $fullpost, null, $maxdiscussions, $getuserlastmodified, $page, $perpage) ) {
+    if (! $discussions = communityforum_get_discussions($cm, $category,$sort, $fullpost, null, $maxdiscussions, $getuserlastmodified, $page, $perpage) ) {
         echo '<div class="forumnodiscuss">';
         if ($forum->type == 'news') {
             echo '('.get_string('nonews', 'forum').')';
@@ -5450,7 +5452,7 @@ function communityforum_print_latest_discussions($course, $forum, $maxdiscussion
 // If we want paging
     if ($page != -1) {
         ///Get the number of discussions found
-        $numdiscussions = communityforum_get_discussions_count($cm);
+        $numdiscussions = communityforum_get_discussions_count($cm,$category);
 
         ///Show the paging bar
         echo $OUTPUT->paging_bar($numdiscussions, $page, $perpage, "view.php?f=$forum->id");

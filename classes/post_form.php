@@ -24,6 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once('lib.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/repository/lib.php');
 
@@ -104,7 +105,7 @@ class mod_communityforum_post_form extends moodleform {
                 $mform->addElement('html', $OUTPUT->notification($message));
             }
         }
-
+        
         $mform->addElement('text', 'subject', get_string('subject', 'forum'), 'size="48"');
         $mform->setType('subject', PARAM_TEXT);
         $mform->addRule('subject', get_string('required'), 'required', null, 'client');
@@ -268,6 +269,9 @@ class mod_communityforum_post_form extends moodleform {
 
         $mform->addElement('hidden', 'reply');
         $mform->setType('reply', PARAM_INT);
+
+        $mform->addElement('hidden', 'category');
+        $mform->setType('category', PARAM_INT);
     }
 
     /**

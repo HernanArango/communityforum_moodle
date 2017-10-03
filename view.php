@@ -23,6 +23,7 @@
 
     require_once('../../config.php');
     require_once('lib.php');
+    require_once('./classes/categories/categories.php');
     require_once($CFG->libdir.'/completionlib.php');
 
     $id          = optional_param('id', 0, PARAM_INT);       // Course Module ID
@@ -32,6 +33,7 @@
     $changegroup = optional_param('group', -1, PARAM_INT);   // choose the current group
     $page        = optional_param('page', 0, PARAM_INT);     // which page to show
     $search      = optional_param('search', '', PARAM_CLEAN);// search string
+    $category      = optional_param('category', 0, PARAM_INT);// search string
 
     $params = array();
     if ($id) {
@@ -46,7 +48,7 @@
         $params['search'] = $search;
     }
     $PAGE->set_url('/mod/communityforum/view.php', $params);
-	
+
     if ($id) {
         if (! $cm = get_coursemodule_from_id('communityforum', $id)) {
             print_error('invalidcoursemodule');
@@ -155,11 +157,11 @@
         $a->blockperiod = get_string('secondstotime'.$forum->blockperiod);
         echo $OUTPUT->notification(get_string('thisforumisthrottled', 'communityforum', $a));
     }
-    
+
     if ($forum->type == 'qanda' && !has_capability('moodle/course:manageactivities', $context)) {
         echo $OUTPUT->notification(get_string('qandanotify','communityforum'));
     }
-    
+/*
     switch ($forum->type) {
         case 'single':
             if (!empty($discussions) && count($discussions) > 1) {
@@ -224,8 +226,28 @@
 
             break;
     }
+*/
+
+
+/*------------------------------------CATEGORIAS--------------------------------*/
+    
+    if(!$category){ 
+        $PAGE->requires->js_call_amd('mod_communityforum/categories','init',array($id));
+        $PAGE->requires->js_call_amd('mod_communityforum/categories','loadCategories',array($id));
+        echo "<div id='categories'></div>";
+    }
+    else{
+
+        echo '<br />';
+            if (!empty($showall)) {
+                communityforum_print_latest_discussions($course, $forum, $category, 0, 'header', '', -1, -1, -1, 0, $cm);
+            } else {
+                communityforum_print_latest_discussions($course, $forum, $category,-1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
+            }
+
+    }
 
     // Add the subscription toggle JS.
-    $PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
+    //$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
 
     echo $OUTPUT->footer($course);

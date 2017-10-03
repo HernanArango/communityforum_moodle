@@ -35,6 +35,7 @@ $prune   = optional_param('prune', 0, PARAM_INT);
 $name    = optional_param('name', '', PARAM_CLEAN);
 $confirm = optional_param('confirm', 0, PARAM_INT);
 $groupid = optional_param('groupid', null, PARAM_INT);
+$category = optional_param('category', null, PARAM_INT);
 
 $PAGE->set_url('/mod/communityforum/post.php', array(
         'reply' => $reply,
@@ -45,6 +46,8 @@ $PAGE->set_url('/mod/communityforum/post.php', array(
         'name'  => $name,
         'confirm'=>$confirm,
         'groupid'=>$groupid,
+        'category'=>$category
+        
         ));
 //these page_params will be passed as hidden variables later in the form.
 $page_params = array('reply'=>$reply, 'forum'=>$forum, 'edit'=>$edit);
@@ -147,6 +150,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     $post->message       = '';
     $post->messageformat = editors_get_preferred_format();
     $post->messagetrust  = 0;
+    $post->category  = $category;
     
     if (isset($groupid)) {
         $post->groupid = $groupid;
@@ -460,6 +464,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
         $newdiscussion->timestart    = $discussion->timestart;
         $newdiscussion->timeend      = $discussion->timeend;
 
+
         $newid = $DB->insert_record('communityforum_discussions', $newdiscussion);
 
         $newpost = new stdClass();
@@ -637,6 +642,7 @@ $mform_post->set_data(array(        'attachments'=>$draftitemid,
                                     'userid'=>$post->userid,
                                     'parent'=>$post->parent,
                                     'discussion'=>$post->discussion,
+                                    'category'=>$category,
                                     'course'=>$course->id) +
                                     $page_params +
 
