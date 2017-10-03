@@ -175,7 +175,7 @@ function communityforum_update_instance($forum, $mform) {
         $forum->assesstimefinish = 0;
     }
 
-    $oldforum = $DB->get_record('forum', array('id'=>$forum->id));
+    $oldforum = $DB->get_record('communityforum', array('id'=>$forum->id));
 
     // MDL-3942 - if the aggregation type or scale (i.e. max grade) changes then recalculate the grades for the entire forum
     // if  scale changes - do we need to recheck the ratings, if ratings higher than scale how do we want to respond?
@@ -188,7 +188,7 @@ function communityforum_update_instance($forum, $mform) {
         $discussions = $DB->get_records('communityforum_discussions', array('forum'=>$forum->id), 'timemodified ASC');
         if (!empty($discussions)) {
             if (count($discussions) > 1) {
-                echo $OUTPUT->notification(get_string('warnformorepost', 'forum'));
+                echo $OUTPUT->notification(get_string('warnformorepost', 'communityforum'));
             }
             $discussion = array_pop($discussions);
         } else {
@@ -209,7 +209,7 @@ function communityforum_update_instance($forum, $mform) {
             communityforum_add_discussion($discussion, null, $message);
 
             if (! $discussion = $DB->get_record('communityforum_discussions', array('forum'=>$forum->id))) {
-                print_error('cannotadd', 'forum');
+                print_error('cannotadd', 'communityforum');
             }
         }
         if (! $post = $DB->get_record('communityforum_posts', array('id'=>$discussion->firstpost))) {
@@ -238,7 +238,7 @@ function communityforum_update_instance($forum, $mform) {
         $DB->update_record('communityforum_discussions', $discussion);
     }
 
-    $DB->update_record('forum', $forum);
+    $DB->update_record('communityforum', $forum);
 
     $modcontext = context_module::instance($forum->coursemodule);
     if (($forum->forcesubscribe == COMMUNITYFORUM_INITIALSUBSCRIBE) && ($oldforum->forcesubscribe <> $forum->forcesubscribe)) {
@@ -266,10 +266,10 @@ function communityforum_update_instance($forum, $mform) {
 function communityforum_delete_instance($id) {
     global $DB;
 
-    if (!$forum = $DB->get_record('forum', array('id'=>$id))) {
+    if (!$forum = $DB->get_record('communityforum', array('id'=>$id))) {
         return false;
     }
-    if (!$cm = get_coursemodule_from_instance('forum', $forum->id)) {
+    if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id)) {
         return false;
     }
     if (!$course = $DB->get_record('course', array('id'=>$cm->course))) {
@@ -4391,8 +4391,8 @@ function communityforum_add_new_post($post, $mform, $unused = null) {
     global $USER, $DB;
 
     $discussion = $DB->get_record('communityforum_discussions', array('id' => $post->discussion));
-    $forum      = $DB->get_record('forum', array('id' => $discussion->forum));
-    $cm         = get_coursemodule_from_instance('forum', $forum->id);
+    $forum      = $DB->get_record('communityforum', array('id' => $discussion->forum));
+    $cm         = get_coursemodule_from_instance('communityforum', $forum->id);
     $context    = context_module::instance($cm->id);
 
     $post->created    = $post->modified = time();
@@ -7164,7 +7164,7 @@ function communityforum_get_extra_capabilities() {
 function communityforum_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $forumnode) {
     global $USER, $PAGE, $CFG, $DB, $OUTPUT;
 
-    $forumobject = $DB->get_record("forum", array("id" => $PAGE->cm->instance));
+    $forumobject = $DB->get_record("communityforum", array("id" => $PAGE->cm->instance));
     if (empty($PAGE->cm->context)) {
         $PAGE->cm->context = context_module::instance($PAGE->cm->instance);
     }
@@ -7863,11 +7863,11 @@ function communityforum_get_context($forumid, $context = null) {
 
     if (!$context || !($context instanceof context_module)) {
         // Find out forum context. First try to take current page context to save on DB query.
-        if ($PAGE->cm && $PAGE->cm->modname === 'forum' && $PAGE->cm->instance == $forumid
+        if ($PAGE->cm && $PAGE->cm->modname === 'communityforum' && $PAGE->cm->instance == $forumid
                 && $PAGE->context->contextlevel == CONTEXT_MODULE && $PAGE->context->instanceid == $PAGE->cm->id) {
             $context = $PAGE->context;
         } else {
-            $cm = get_coursemodule_from_instance('forum', $forumid);
+            $cm = get_coursemodule_from_instance('commmunityforum', $forumid);
             $context = \context_module::instance($cm->id);
         }
     }
@@ -7935,7 +7935,7 @@ function communityforum_discussion_view($modcontext, $forum, $discussion) {
 function communityforum_discussion_pin($modcontext, $forum, $discussion) {
     global $DB;
 
-    $DB->set_field('communityforum_discussions', 'pinned', communityforum_DISCUSSION_PINNED, array('id' => $discussion->id));
+    $DB->set_field('communityforum_discussions', 'pinned', COMMUNITYFORUM_DISCUSSION_PINNED, array('id' => $discussion->id));
 
     $params = array(
         'context' => $modcontext,
@@ -7959,7 +7959,7 @@ function communityforum_discussion_pin($modcontext, $forum, $discussion) {
 function communityforum_discussion_unpin($modcontext, $forum, $discussion) {
     global $DB;
 
-    $DB->set_field('communityforum_discussions', 'pinned', communityforum_DISCUSSION_UNPINNED, array('id' => $discussion->id));
+    $DB->set_field('communityforum_discussions', 'pinned', COMMUNITYFORUM_DISCUSSION_PINNED, array('id' => $discussion->id));
 
     $params = array(
         'context' => $modcontext,
