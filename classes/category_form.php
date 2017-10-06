@@ -82,7 +82,7 @@ class mod_communityforum_category_form extends moodleform {
         $mform->addRule('name', get_string('required'), 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
-        $mform->addElement('textarea', 'introduction', get_string('description_category', 'communityforum'), 'wrap="virtual" rows="20" cols="50"');
+        $mform->addElement('textarea', 'introduction', get_string('description_category', 'communityforum'), 'wrap="virtual" rows="5" cols="80"');
 
         $mform->addElement('select', 'id_parent_category', get_string('parent_category', 'communityforum'), communityforum_get_categories($forum));
 

@@ -31,7 +31,21 @@ $forum   = optional_param('forum', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
 $parent_category = optional_param('parent_category', 0, PARAM_INT);
-$forum = $DB->get_record('communityforum', array('id' => $forum));
+
+
+if (! $forum = $DB->get_record('communityforum', array('id' => $forum))) {
+            print_error('invalidforumid', 'communityforum');
+}
+if (! $course = $DB->get_record('course', array('id' => $forum->course))) {
+        print_error('invalidcourseid');
+}
+
+if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $course->id)) { // For the logs
+        print_error('invalidcoursemodule');
+} 
+else {
+        $modcontext = context_module::instance($cm->id);
+}
 
 $PAGE->set_url('/mod/communityforum/cateogry.php', array(
         'forum' => $forum->id,
@@ -40,12 +54,10 @@ $PAGE->set_url('/mod/communityforum/cateogry.php', array(
         'category'=>$parent_category,
         ));
 
-//$cm = get_coursemodule_from_instance('communityforum', $forum->id);
-//$course = $DB->get_record('course', array('id' => $forum->course));
-//$modcontext = context_module::instance($cm->id);
-//$PAGE->set_cm($cm, $course, $forum);
-//$PAGE->set_context($modcontext);
-$PAGE->set_heading($forum->name);
+$PAGE->set_cm($cm, $course, $forum);
+$PAGE->set_context($modcontext);
+$PAGE->set_title($forum->name);
+$PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 
 //these page_params will be passed as hidden variables later in the form.
