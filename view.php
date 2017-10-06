@@ -45,6 +45,7 @@
     if ($search) {
         $params['search'] = $search;
     }
+    
     $PAGE->set_url('/mod/communityforum/view.php', $params);
 	
     if ($id) {

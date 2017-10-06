@@ -398,6 +398,6 @@ communityforum_print_discussion($course, $cm, $forum, $discussion, $post, $displ
 echo $neighbourlinks;
 
 // Add the subscription toggle JS.
-$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'M.mod_communityforum.subscriptiontoggle.init');
+$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
 
 echo $OUTPUT->footer();
