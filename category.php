@@ -30,7 +30,7 @@ require_once($CFG->libdir.'/completionlib.php');
 $forum   = optional_param('forum', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
-$parent_category = optional_param('parent_category', 0, PARAM_INT);
+$category = optional_param('category', 0, PARAM_INT);
 
 
 if (! $forum = $DB->get_record('communityforum', array('id' => $forum))) {
@@ -51,8 +51,9 @@ $PAGE->set_url('/mod/communityforum/cateogry.php', array(
         'forum' => $forum->id,
         'edit'  => $edit,
         'delete'=> $delete,
-        'category'=>$parent_category,
+        'category'=>$category,
         ));
+
 
 $PAGE->set_cm($cm, $course, $forum);
 $PAGE->set_context($modcontext);
@@ -60,28 +61,42 @@ $PAGE->set_title($forum->name);
 $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 
-//these page_params will be passed as hidden variables later in the form.
-
-
-//Instantiate simplehtml_form 
 $mform = new mod_communityforum_category_form('category.php', array('forum' => $forum->id,
                                                         'edit' => $edit,
                                                         'delete' => $delete,
+                                                        'category' => $category,
                                                         ));
  
-//Form processing and displaying is done here
+
+//
 if ($mform->is_cancelled()) {
-    //Handle form cancel operation, if cancel button is present on form
-} else if ($fromform = $mform->get_data()) {
-  //$page_params = array('forum'=>$forum->id, 'edit'=>$edit, 'parent_category'=>$parent_category, 'delete'=>$delete);
-  $return = communityforum_add_category($fromform);
-  if($return){
-    redirect(new moodle_url('/mod/communityforum/view.php', array('f' => $forum->id)));
+  redirect(new moodle_url('/mod/communityforum/view.php', array('id' => $cm->id)));  
+} 
+else if ($fromform = $mform->get_data()) {
+
+  $edit=$fromform->edit;
+
+  if($edit){
+    $return = communityforum_update_category($fromform);
+
+    if($return){
+      redirect(new moodle_url('/mod/communityforum/view.php', array('f' => $forum->id)));
+    }
+    else{
+      
+    }   
   }
   else{
-
-  }   
-
-} else {
+    $return = communityforum_add_category($fromform);
+    if($return){
+      redirect(new moodle_url('/mod/communityforum/view.php', array('f' => $forum->id)));
+    }
+    else{
+    }   
+  }
+} 
+else {
   $mform->display();
 }
+
+echo $OUTPUT->footer($course);

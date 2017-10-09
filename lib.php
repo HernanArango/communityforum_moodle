@@ -8153,13 +8153,18 @@ function communityforum_add_category($category){
     }   
 }
 
-function communityforum_get_categories($forumid) {
+function communityforum_get_categories($forumid,$category) {
 // $forum is an object
-    global $DB;
 
-    $sql="select id,name_category from {communityforum_categories} where forum=?";
-    
-    $result = $DB->get_records_sql($sql,array($forumid));    
+    global $DB;
+    if($category == 0){
+        $sql="select id,name_category from {communityforum_categories} where forum=?"; 
+        $result = $DB->get_records_sql($sql,array($forumid));
+    }
+    else{
+        $sql="select id,name_category from {communityforum_categories} where forum=? and id!=?";    
+        $result = $DB->get_records_sql($sql,array($forumid,$category));
+    }
 
     $categories=array();
     $categories[0] = "seleccione";
@@ -8168,4 +8173,23 @@ function communityforum_get_categories($forumid) {
     }
 
     return $categories;
+}
+
+function communityforum_update_category($form){
+    global $DB;
+    $update_category= new stdClass();
+    $update_category->id=$form->category;
+    $update_category->name_category=$form->name;
+    $update_category->description=$form->introduction;
+    $update_category->parent_category=$form->id_parent_category;    
+    $update_category->forum=$form->forum;
+    
+    $result = $DB->update_record('communityforum_categories', $update_category);
+    
+    if ($result) {
+        return true;
+    }
+    else{
+        return false;
+    }   
 }
