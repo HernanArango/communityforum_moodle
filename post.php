@@ -161,7 +161,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     // Unsetting this will allow the correct return URL to be calculated later.
     unset($SESSION->fromdiscussion);
     
-} else if (!empty($reply)) {      // User is writing a new reply
+} else if (!empty($reply)) {     // User is writing a new reply
     
     if (! $parent = communityforum_get_post_full($reply)) {
         print_error('invalidparentpostid', 'communityforum');
@@ -240,7 +240,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     // Unsetting this will allow the correct return URL to be calculated later.
     unset($SESSION->fromdiscussion);
 
-} else if (!empty($edit)) {  // User is editing their own post
+} else if (!empty($edit)) { // User is editing their own post
     
     if (! $post = communityforum_get_post_full($edit)) {
         print_error('invalidpostid', 'communityforum');
@@ -535,6 +535,7 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     echo $OUTPUT->footer();
     die;
 } else {
+
     print_error('unknowaction');
 
 }
@@ -851,7 +852,8 @@ if ($mform_post->is_cancelled()) {
 
     } else { // Adding a new discussion.
         // The location to redirect to after successfully posting.
-        $redirectto = new moodle_url('view.php', array('f' => $fromform->forum));
+
+        $redirectto = new moodle_url('view.php', array('f' => $fromform->forum,'category'=>$category));
 
         $fromform->mailnow = empty($fromform->mailnow) ? 0 : 1;
 

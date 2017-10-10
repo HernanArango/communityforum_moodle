@@ -231,7 +231,8 @@
 
 /*------------------------------------CATEGORIAS--------------------------------*/
     
-    if(!$category){ 
+    if(!$category){
+
         $PAGE->requires->js_call_amd('mod_communityforum/categories','init',array($id));
         $PAGE->requires->js_call_amd('mod_communityforum/categories','loadCategories',array($id));
         echo "<div id='categories'></div>";
