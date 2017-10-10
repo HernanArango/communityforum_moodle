@@ -116,7 +116,6 @@ if (!empty($forum)) {      // User is starting a new discussion in a forum
     // Retrieve the contexts.
     $modcontext    = context_module::instance($cm->id);
     $coursecontext = context_course::instance($course->id);
-    
     if (! communityforum_user_can_post_discussion($forum, $groupid, -1, $cm)) {
         if (!isguestuser()) {
             if (!is_enrolled($coursecontext)) {

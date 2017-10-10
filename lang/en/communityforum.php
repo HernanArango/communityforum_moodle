@@ -275,6 +275,7 @@ $string['invaliddiscussionid'] = 'Discussion ID was incorrect or no longer exist
 $string['invaliddigestsetting'] = 'An invalid mail digest setting was provided';
 $string['invalidforcesubscribe'] = 'Invalid force subscription mode';
 $string['invalidforumid'] = 'Forum ID was incorrect';
+$string['invalidcategoryid'] = 'Category ID was incorrect';
 $string['invalidparentpostid'] = 'Parent post ID was incorrect';
 $string['invalidpostid'] = 'Invalid post ID - {$a}';
 $string['lastpost'] = 'Last post';
@@ -556,3 +557,7 @@ $string['emaildigestupdated_default'] = 'Your default profile setting of \'{$a->
 $string['emaildigest_0'] = 'You will receive one e-mail per forum post.';
 $string['emaildigest_1'] = 'You will receive one digest e-mail per day containing the complete contents of each forum post.';
 $string['emaildigest_2'] = 'You will receive one digest e-mail per day containing the subject of each forum post.';
+//Category
+$string['name_category'] = 'Name.';
+$string['parent_category'] = 'Parent Category.';
+$string['description_category'] = 'Description Category.';

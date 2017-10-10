@@ -1338,7 +1338,7 @@ function communityforum_filter_user_groups_discussions($discussions) {
 
         // Course data is already cached.
         $instances = get_fast_modinfo($discussion->course)->get_instances();
-        $forum = $instances['forum'][$discussion->forum];
+        $forum = $instances['communityforum'][$discussion->forum];
 
         // Continue if the user should not see this discussion.
         if (!communityforum_is_user_group_discussion($forum, $discussion->groupid)) {
@@ -5585,7 +5585,7 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
                 }
 
                 $discussion->forum = $forum->id;
-
+                
                 communityforum_print_post($discussion, $discussion, $forum, $cm, $course, $ownpost, 0, $link, false,
                         '', null, true, $forumtracked);
             break;
@@ -8108,4 +8108,88 @@ function communityforum_check_updates_since(cm_info $cm, $from, $filter = array(
     }
 
     return $updates;
+}
+
+function communityforum_user_can_create_category($coursecontext) {
+// $forum is an object
+    global $USER;
+    global $COURSE;
+
+    if (isguestuser() or !isloggedin()) {
+        return false;
+    }
+    
+    if(has_capability('moodle/site:config', $coursecontext)) {
+        return true;
+    } else {
+        return false;
+    }    
+}
+
+function communityforum_add_category($category){
+    global $DB;
+
+    $save_category= new stdClass();
+
+    $save_category->name_category=$category->name;
+    $save_category->description=$category->introduction;
+    if (empty($category->id_parent_category)){
+        $save_category->parent_category=0;    
+    }
+    else{
+        $save_category->parent_category=$category->id_parent_category;    
+    }
+    
+    $save_category->forum=$category->forum;
+    
+    $result = $DB->insert_record('communityforum_categories', $save_category);
+    
+    
+    if ($result) {
+        return true;
+    }
+    else{
+        return false;
+    }   
+}
+
+function communityforum_get_categories($forumid,$category) {
+// $forum is an object
+
+    global $DB;
+    if($category == 0){
+        $sql="select id,name_category from {communityforum_categories} where forum=?"; 
+        $result = $DB->get_records_sql($sql,array($forumid));
+    }
+    else{
+        $sql="select id,name_category from {communityforum_categories} where forum=? and id!=?";    
+        $result = $DB->get_records_sql($sql,array($forumid,$category));
+    }
+
+    $categories=array();
+    $categories[0] = "seleccione";
+    foreach ($result as $key => $obj) {
+        $categories[$obj->id] = $obj->name_category;
+    }
+
+    return $categories;
+}
+
+function communityforum_update_category($form){
+    global $DB;
+    $update_category= new stdClass();
+    $update_category->id=$form->category;
+    $update_category->name_category=$form->name;
+    $update_category->description=$form->introduction;
+    $update_category->parent_category=$form->id_parent_category;    
+    $update_category->forum=$form->forum;
+    
+    $result = $DB->update_record('communityforum_categories', $update_category);
+    
+    if ($result) {
+        return true;
+    }
+    else{
+        return false;
+    }   
 }
