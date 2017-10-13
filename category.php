@@ -27,22 +27,21 @@ require_once('../../config.php');
 require_once('lib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
-$forum   = optional_param('forum', 0, PARAM_INT);
+$id   = optional_param('id', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
 $category = optional_param('category', 0, PARAM_INT);
 
 
-if (! $forum = $DB->get_record('communityforum', array('id' => $forum))) {
-            print_error('invalidforumid', 'communityforum');
-}
-if (! $course = $DB->get_record('course', array('id' => $forum->course))) {
-        print_error('invalidcourseid');
-}
-
-if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $course->id)) { // For the logs
+if (!$cm = get_coursemodule_from_id('communityforum', $id)) { // For the logs
         print_error('invalidcoursemodule');
 } 
+if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
+        print_error('invalidcourseid');
+}
+if (! $forum = $DB->get_record('communityforum', array('id' => $cm->instance))) {
+            print_error('invalidforumid', 'communityforum');
+}
 else {
         $modcontext = context_module::instance($cm->id);
 }
@@ -61,6 +60,7 @@ $PAGE->set_title($forum->name);
 $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 
+
 $mform = new mod_communityforum_category_form('category.php', array('forum' => $forum->id,
                                                         'edit' => $edit,
                                                         'delete' => $delete,
@@ -72,6 +72,21 @@ $mform = new mod_communityforum_category_form('category.php', array('forum' => $
 if ($mform->is_cancelled()) {
   redirect(new moodle_url('/mod/communityforum/view.php', array('id' => $cm->id)));  
 } 
+
+else if($delete){
+
+    $return = communityforum_delete_category($category);
+    
+    if($return){
+      redirect(new moodle_url('/mod/communityforum/view.php', array('id' => $cm->id)));
+    }else{
+      print_error('error_delete_cateogry', 'communityforum');
+      $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/view.php', array('id' => $cm->id));
+      $button = new single_button($url,"Volver");
+      echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
+    } 
+}
+
 else if ($fromform = $mform->get_data()) {
 
   $edit=$fromform->edit;
@@ -80,18 +95,27 @@ else if ($fromform = $mform->get_data()) {
     $return = communityforum_update_category($fromform);
 
     if($return){
-      redirect(new moodle_url('/mod/communityforum/view.php', array('f' => $forum->id)));
+
+      redirect(new moodle_url('/mod/communityforum/view.php', array('id' => $cm->id)));
     }
     else{
-      
+      print_error('error_edit_cateogry', 'communityforum');
+      $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/view.php', array('id' => $cm->id));
+      $button = new single_button($url,"Volver");
+      echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
     }   
   }
+  
   else{
     $return = communityforum_add_category($fromform);
     if($return){
-      redirect(new moodle_url('/mod/communityforum/view.php', array('f' => $forum->id)));
+      redirect(new moodle_url('/mod/communityforum/view.php', array('id' => $cm->id)));
     }
     else{
+      print_error('add_category_correct', 'communityforum');
+      $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/view.php', array('id' => $cm->id));
+      $button = new single_button($url,"Continuar");
+      echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
     }   
   }
 } 

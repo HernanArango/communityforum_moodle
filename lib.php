@@ -8193,3 +8193,16 @@ function communityforum_update_category($form){
         return false;
     }   
 }
+
+function communityforum_delete_category($idCategory){
+    global $DB;
+    
+    $result = $DB->delete_record('communityforum_categories', array('id' => $idCategory));
+    
+    if ($result) {
+        return true;
+    }
+    else{
+        return false;
+    }   
+}
