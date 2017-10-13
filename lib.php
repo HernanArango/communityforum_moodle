@@ -5490,7 +5490,7 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
     }
 
     if ($displayformat == 'header') {
-        echo '<table cellspacing="0" class="forumheaderlist">';
+        echo '<table cellspacing="0" class="">';//forumheaderlist
         echo '<thead>';
         echo '<tr>';
         echo '<th class="header topic" scope="col">'.get_string('discussion', 'forum').'</th>';

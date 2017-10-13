@@ -70,12 +70,16 @@ if(!$categories){
 		if($total_sub_categorias > 0 && $total_sub_categorias != 0){
 			echo "<div class='category-communityforum enlace' id='$id' parent='$categoria->id' estado='cerrado'>";
 			echo "<i class='fa fa-plus-square' aria-hidden='true'></i>";
-	 		echo "<a id='$id' parent='$categoria->id' href='#'>".$categoria->name_category."</a><br>";
+	 		echo "<a id='$id' parent='$categoria->id' href='#'>".$categoria->name_category."</a>";
+	 		echo "<a href='view.php?id=$id&category=$categoria->id&edit=1'><i class='fa fa-cog' aria-hidden='true'></i>
+			</a><br>";
 		}
 	 	else{
 	 		echo "<div class='category-communityforum' id='$id' parent='$categoria->id' estado='cerrado'>";
 			echo "<i class='fa fa-plus-square' aria-hidden='true'></i>";
-	 		echo "<a href='view.php?id=$id&category=$categoria->id'>".$categoria->name_category."</a><br>";
+	 		echo "<a href='view.php?id=$id&category=$categoria->id'>".$categoria->name_category."</a>";
+	 		echo "<a href='view.php?id=$id&category=$categoria->id&edit=1'><i class='fa fa-cog' aria-hidden='true'></i>
+				</a><br>";
 	 	}
 
 	 	echo "</div>";
