@@ -47,6 +47,7 @@ else {
 }
 
 $PAGE->set_url('/mod/communityforum/cateogry.php', array(
+        'id' =>    $id,
         'forum' => $forum->id,
         'edit'  => $edit,
         'delete'=> $delete,
@@ -60,8 +61,8 @@ $PAGE->set_title($forum->name);
 $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 
-
-$mform = new mod_communityforum_category_form('category.php', array('forum' => $forum->id,
+$mform = new mod_communityforum_category_form('category.php', array('id' => $id,
+                                                        'forum' => $forum->id,
                                                         'edit' => $edit,
                                                         'delete' => $delete,
                                                         'category' => $category,

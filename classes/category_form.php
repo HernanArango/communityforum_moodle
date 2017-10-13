@@ -46,6 +46,7 @@ class mod_communityforum_category_form extends moodleform {
         global $CFG, $OUTPUT, $DB;
 
         $mform =& $this->_form;
+        $id = $this->_customdata['id'];
         $forum = $this->_customdata['forum'];
         $category = $this->_customdata['category'];
         $edit = $this->_customdata['edit'];
@@ -71,6 +72,10 @@ class mod_communityforum_category_form extends moodleform {
         $mform->addElement('hidden', 'forum');
         $mform->setType('forum', PARAM_INT);
         $mform->setDefault('forum', $forum);
+
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
+        $mform->setDefault('id', $id);
 
         $submit_string = "Guardar Categoria";
         $this->add_action_buttons(true, $submit_string);
@@ -107,6 +112,10 @@ class mod_communityforum_category_form extends moodleform {
         $mform->addElement('hidden', 'category');
         $mform->setType('category', PARAM_INT);
         $mform->setDefault('category', $category);
+
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
+        $mform->setDefault('id', $id);
 
         $submit_string = "Actualizar Categoria";
         $this->add_action_buttons(true, $submit_string);

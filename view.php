@@ -252,7 +252,7 @@
 
     // Add the subscription toggle JS.
     //$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
-    $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('forum' => $forum->id));
+    $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('id' => $id));
     //$PAGE->set_button($OUTPUT->single_button($url,"Nueva Categoria"));
     $button = new single_button($url,"Nueva Categoria");
     
