@@ -3888,7 +3888,7 @@ function communityforum_get_discussion_subscription_icon($forum, $discussionid, 
     ));
 
     if ($includetext) {
-        $o .= $subscriptionstatus ? get_string('subscribed', 'mod_communityforum') : get_string('notsubscribed', 'communityforum');
+        $o .= $subscriptionstatus ? get_string('subscribed', 'communityforum') : get_string('notsubscribed', 'communityforum');
     }
 
     if ($subscriptionstatus) {
