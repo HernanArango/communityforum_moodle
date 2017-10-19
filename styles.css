@@ -352,7 +352,7 @@ span.unread {
 
 
 
-/*categorias*/
+/*----------categorias----------*/
 
 .category-communityforum{
 
@@ -408,4 +408,14 @@ span.unread {
 
   .path-mod-communityforum td{
     padding: 12px 0 12px 0;
+  }
+
+  .path-mod-communityforum .subcategoria{
+        margin-left: 50px;
+        margin-bottom: 15px;
+  }
+
+    .path-mod-communityforum .ico_category{
+        margin-right: 7px;
+        
   }
