@@ -4439,8 +4439,8 @@ function communityforum_update_post($newpost, $mform, $unused = null) {
 
     $post       = $DB->get_record('communityforum_posts', array('id' => $newpost->id));
     $discussion = $DB->get_record('communityforum_discussions', array('id' => $post->discussion));
-    $forum      = $DB->get_record('forum', array('id' => $discussion->forum));
-    $cm         = get_coursemodule_from_instance('forum', $forum->id);
+    $forum      = $DB->get_record('communityforum', array('id' => $discussion->forum));
+    $cm         = get_coursemodule_from_instance('communityforum', $forum->id);
     $context    = context_module::instance($cm->id);
 
     // Allowed modifiable fields.
