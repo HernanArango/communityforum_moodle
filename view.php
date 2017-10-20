@@ -237,6 +237,10 @@
         $PAGE->requires->js_call_amd('mod_communityforum/categories','init',array($id));
         $PAGE->requires->js_call_amd('mod_communityforum/categories','loadCategories',array($id));
         echo "<div id='categories'></div>";
+
+        $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('id' => $id));
+        $button = new single_button($url,"Nueva Categoria");
+        echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
     }
     else{
 
@@ -247,17 +251,6 @@
                 communityforum_print_latest_discussions($course, $forum, $category,-1, 'header', '', -1, -1, $page, $CFG->forum_manydiscussions, $cm);
             }
         echo '<br>';
-
     }
-
-    // Add the subscription toggle JS.
-    //$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
-    $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('id' => $id));
-    //$PAGE->set_button($OUTPUT->single_button($url,"Nueva Categoria"));
-    $button = new single_button($url,"Nueva Categoria");
     
-    
-    echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
-    
-
     echo $OUTPUT->footer($course);

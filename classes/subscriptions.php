@@ -318,7 +318,7 @@ class subscriptions {
                 }
 
                 if (!isset(self::$forumcache[$userid][$forumid])) {
-                    if ($DB->record_exists('forum_subscriptions', array(
+                    if ($DB->record_exists('communityforum_subscriptions', array(
                         'userid' => $userid,
                         'forum' => $forumid,
                     ))) {
@@ -328,7 +328,7 @@ class subscriptions {
                     }
                 }
             } else {
-                $subscriptions = $DB->get_recordset('forum_subscriptions', array(
+                $subscriptions = $DB->get_recordset('communityforum_subscriptions', array(
                     'forum' => $forumid,
                 ), '', 'id, userid');
                 foreach ($subscriptions as $id => $data) {
@@ -432,11 +432,11 @@ class subscriptions {
 
                 $sql = "SELECT $fields
                         FROM (
-                            SELECT userid FROM {forum_subscriptions} s
+                            SELECT userid FROM {communityforum_subscriptions} s
                             WHERE
                                 s.forum = :sforumid
                                 UNION
-                            SELECT userid FROM {forum_discussion_subs} ds
+                            SELECT userid FROM {communityforum_discuss_subs} ds
                             WHERE
                                 ds.forum = :dsforumid AND ds.preference <> :unsubscribed
                         ) subscriptions
@@ -448,7 +448,7 @@ class subscriptions {
                 $sql = "SELECT $fields
                         FROM {user} u
                         JOIN ($esql) je ON je.id = u.id
-                        JOIN {forum_subscriptions} s ON s.userid = u.id
+                        JOIN {communityforum_subscriptions} s ON s.userid = u.id
                         WHERE
                           s.forum = :forumid
                         ORDER BY u.email ASC";
@@ -460,7 +460,7 @@ class subscriptions {
         unset($results[$CFG->siteguest]);
 
         // Apply the activity module availability resetrictions.
-        $cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course);
+        $cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course);
         $modinfo = get_fast_modinfo($forum->course);
         $info = new \core_availability\info_module($modinfo->get_cm($cm->id));
         $results = $info->filter_user_list($results);
@@ -508,7 +508,7 @@ class subscriptions {
                 }
 
                 if (!isset(self::$forumdiscussioncache[$userid][$forumid])) {
-                    $subscriptions = $DB->get_recordset('forum_discussion_subs', array(
+                    $subscriptions = $DB->get_recordset('communityforum_discuss_subs', array(
                         'userid' => $userid,
                         'forum' => $forumid,
                     ), null, 'id, discussion, preference');
@@ -518,7 +518,7 @@ class subscriptions {
                     $subscriptions->close();
                 }
             } else {
-                $subscriptions = $DB->get_recordset('forum_discussion_subs', array(
+                $subscriptions = $DB->get_recordset('communityforum_discuss_subs', array(
                     'forum' => $forumid,
                 ), null, 'id, userid, discussion, preference');
                 foreach ($subscriptions as $id => $data) {
@@ -596,11 +596,11 @@ class subscriptions {
         $sub->userid  = $userid;
         $sub->forum = $forum->id;
 
-        $result = $DB->insert_record("forum_subscriptions", $sub);
+        $result = $DB->insert_record("communityforum_subscriptions", $sub);
 
         if ($userrequest) {
-            $discussionsubscriptions = $DB->get_recordset('forum_discussion_subs', array('userid' => $userid, 'forum' => $forum->id));
-            $DB->delete_records_select('forum_discussion_subs',
+            $discussionsubscriptions = $DB->get_recordset('communityforum_discuss_subs', array('userid' => $userid, 'forum' => $forum->id));
+            $DB->delete_records_select('communityforum_discuss_subs',
                     'userid = :userid AND forum = :forumid AND preference <> :preference', array(
                         'userid' => $userid,
                         'forumid' => $forum->id,
@@ -632,7 +632,7 @@ class subscriptions {
         $event  = event\subscription_created::create($params);
         if ($userrequest && $discussionsubscriptions) {
             foreach ($discussionsubscriptions as $subscription) {
-                $event->add_record_snapshot('forum_discussion_subs', $subscription);
+                $event->add_record_snapshot('communityforum_discuss_subs', $subscription);
             }
             $discussionsubscriptions->close();
         }
@@ -659,14 +659,14 @@ class subscriptions {
             'userid' => $userid,
             'forum' => $forum->id,
         );
-        $DB->delete_records('forum_digests', $sqlparams);
+        $DB->delete_records('communityforum_digests', $sqlparams);
 
-        if ($forumsubscription = $DB->get_record('forum_subscriptions', $sqlparams)) {
-            $DB->delete_records('forum_subscriptions', array('id' => $forumsubscription->id));
+        if ($forumsubscription = $DB->get_record('communityforum_subscriptions', $sqlparams)) {
+            $DB->delete_records('communityforum_subscriptions', array('id' => $forumsubscription->id));
 
             if ($userrequest) {
-                $discussionsubscriptions = $DB->get_recordset('forum_discussion_subs', $sqlparams);
-                $DB->delete_records('forum_discussion_subs',
+                $discussionsubscriptions = $DB->get_recordset('communityforum_discuss_subs', $sqlparams);
+                $DB->delete_records('communityforum_discuss_subs',
                         array('userid' => $userid, 'forum' => $forum->id, 'preference' => self::COMMUNITYFORUM_DISCUSSION_UNSUBSCRIBED));
 
                 // We know that the there were previously entries and there aren't any more.
@@ -687,10 +687,10 @@ class subscriptions {
 
             );
             $event = event\subscription_deleted::create($params);
-            $event->add_record_snapshot('forum_subscriptions', $forumsubscription);
+            $event->add_record_snapshot('communityforum_subscriptions', $forumsubscription);
             if ($userrequest && $discussionsubscriptions) {
                 foreach ($discussionsubscriptions as $subscription) {
-                    $event->add_record_snapshot('forum_discussion_subs', $subscription);
+                    $event->add_record_snapshot('communityforum_discuss_subs', $subscription);
                 }
                 $discussionsubscriptions->close();
             }
@@ -769,7 +769,7 @@ class subscriptions {
      * @param \stdClass $discussion The discussion to unsubscribe from
      * @param \context_module|null $context Module context, may be omitted if not known or if called for the current
      *     module set in page.
-     * @return boolean Whether a change was made
+     * @return boolean Whethxer a change was made
      */
     public static function unsubscribe_user_from_discussion($userid, $discussion, $context = null) {
         global $DB;

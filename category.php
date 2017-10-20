@@ -75,7 +75,10 @@ if ($mform->is_cancelled()) {
 } 
 
 else if($delete){
-
+    print_r("delete");
+    
+    
+    /*
     $return = communityforum_delete_category($category);
     
     if($return){
@@ -86,6 +89,7 @@ else if($delete){
       $button = new single_button($url,"Volver");
       echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
     } 
+    */
 }
 
 else if ($fromform = $mform->get_data()) {
@@ -124,4 +128,6 @@ else {
   $mform->display();
 }
 
+$PAGE->requires->js_call_amd('mod_communityforum/delete','init');
 echo $OUTPUT->footer($course);
+

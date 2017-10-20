@@ -3908,6 +3908,7 @@ function communityforum_get_discussion_subscription_icon($forum, $discussionid, 
     } else {
         $output = $OUTPUT->pix_icon('t/unsubscribed', get_string('clicktosubscribe', 'communityforum'), 'mod_communityforum');
         if ($includetext) {
+
             $output .= get_string('notsubscribed', 'communityforum');
         }
 
@@ -3917,6 +3918,7 @@ function communityforum_get_discussion_subscription_icon($forum, $discussionid, 
                 'data-forumid' => $forum->id,
                 'data-discussionid' => $discussionid,
                 'data-includetext' => $includetext,
+
             ));
     }
 }
