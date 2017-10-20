@@ -239,8 +239,12 @@
         echo "<div id='categories'></div>";
 
         $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('id' => $id));
-        $button = new single_button($url,"Nueva Categoria");
-        echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
+        
+        if(is_siteadmin()){
+        
+            $button = new single_button($url,"Nueva Categoria");
+            echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
+        }
     }
     else{
 
