@@ -236,8 +236,13 @@
 
         $PAGE->requires->js_call_amd('mod_communityforum/categories','init',array($id));
         $PAGE->requires->js_call_amd('mod_communityforum/categories','loadCategories',array($id));
-        echo "<div id='categories'></div>";
-
+        echo "<div class='row-fluid'>";
+        echo "<div id='categories' class='span6'></div>";
+        echo "<div id='recent_post' class='span6'>
+        
+<img src='http://localhost/moodle/mod/communityforum/pix/post.png'>
+</div>";
+        echo "</div>";
         $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('id' => $id));
         
         if(is_siteadmin()){
