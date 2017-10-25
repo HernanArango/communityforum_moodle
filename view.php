@@ -23,7 +23,7 @@
 
     require_once('../../config.php');
     require_once('lib.php');
-    require_once('./classes/categories/categories.php');
+    require_once('./classes/posts/posts.php');
     require_once($CFG->libdir.'/completionlib.php');
 
     $id          = optional_param('id', 0, PARAM_INT);       // Course Module ID
@@ -233,15 +233,16 @@
 /*------------------------------------CATEGORIAS--------------------------------*/
     
     if(!$category){
-
+        $posts = new Posts();
+        
         $PAGE->requires->js_call_amd('mod_communityforum/categories','init',array($id));
         $PAGE->requires->js_call_amd('mod_communityforum/categories','loadCategories',array($id));
         echo "<div class='row-fluid'>";
         echo "<div id='categories' class='span6'></div>";
-        echo "<div id='recent_post' class='span6'>
-        
-<img src='http://localhost/moodle/mod/communityforum/pix/post.png'>
-</div>";
+        echo "<div id='recent_post' class='span6'>";
+            $posts->show_last($forum->id);    
+            //<img src='http://localhost/moodle/mod/communityforum/pix/post.png'>
+        echo "</div>";
         echo "</div>";
         $url = new moodle_url($CFG->wwwroot . '/mod/communityforum/category.php', array('id' => $id));
         
