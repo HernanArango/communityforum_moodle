@@ -8196,10 +8196,22 @@ function communityforum_update_category($form){
     }   
 }
 
-function communityforum_delete_category($idCategory){
+function communityforum_delete_category($idCategory,$type){
     global $DB;
-    
-    $result = $DB->delete_record('communityforum_categories', array('id' => $idCategory));
+    if($type == 1){
+        $result2 = $DB->delete_records('communityforum_categories', array('parent_category' => $idCategory));        
+    }
+    else if($type == 2){
+        
+        $sql="update {communityforum_categories} set parent_category=0  where parent_category=?";
+
+        $params = array();
+        $params['parent_category'] = $idCategory;
+
+        $result3 = $DB->execute($sql,$params);        
+    }
+
+    $result = $DB->delete_records('communityforum_categories', array('id' => $idCategory));
     
     if ($result) {
         return true;

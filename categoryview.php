@@ -71,14 +71,15 @@ if(!$categories){
 			echo "<div class='category-communityforum enlace' parent='$categoria->id' estado='cerrado'>";
 			echo "<i id='ico".$categoria->id."' class='fa fa-plus-square ico_category' aria-hidden='true'></i>";
 	 		echo "<a id='$id' parent='$categoria->id' href='#'>".$categoria->name_category."</a>";
-	 		echo "<a style='float:right' href='category.php?id=$id&category=$categoria->id&edit=1'><i class='fa fa-cog' aria-hidden='true'></i></a><br></div>";
+	 		echo "<a style='float:right' href='category.php?id=$id&category=$categoria->id&edit=1'><i class='fa fa-cog' aria-hidden='true'></i></a>";
+	 		echo "<a style='float:right' id='delete'><i subcategory=0 parent='$categoria->id' class='fa fa-trash needjs' aria-hidden='true'></i></a><br></div>";
 	 		echo "<div id='sub".$categoria->id."' class='subcategoria'></div>";
 		}
 	 	else{
 	 		echo "<div class='category-communityforum' parent='$categoria->id' estado='cerrado'>";
-			//echo "<i class='fa fa-plus-square' aria-hidden='true'></i>";
 	 		echo "<a href='view.php?id=$id&category=$categoria->id'>".$categoria->name_category."</a>";
-	 		echo "<a style='float:right' href='category.php?id=$id&category=$categoria->id&edit=1'><i class='fa fa-cog ico_category' aria-hidden='true'></i></a><br></div>";
+	 		echo "<a style='float:right' href='category.php?id=$id&category=$categoria->id&edit=1'><i class='fa fa-cog' aria-hidden='true'></i></a>";
+	 		echo "<a style='float:right' id='delete'><i subcategory=1 parent='$categoria->id' class='fa fa-trash ico_category needjs' aria-hidden='true'></i></a><br></div>";
 			echo "<div id='sub".$categoria->id."' class='subcategoria'></div>";	 	}
 
 	 	//echo "</div>";

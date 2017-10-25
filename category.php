@@ -31,6 +31,8 @@ $id   = optional_param('id', 0, PARAM_INT);
 $edit    = optional_param('edit', 0, PARAM_INT);
 $delete  = optional_param('delete', 0, PARAM_INT);
 $category = optional_param('category', 0, PARAM_INT);
+//UsadoGestion de eliminacion de subcategorias
+$type = optional_param('type', 0, PARAM_INT);
 
 
 if (!$cm = get_coursemodule_from_id('communityforum', $id)) { // For the logs
@@ -75,11 +77,9 @@ if ($mform->is_cancelled()) {
 } 
 
 else if($delete){
-    print_r("delete");
+
     
-    
-    /*
-    $return = communityforum_delete_category($category);
+    $return = communityforum_delete_category($category,$type);
     
     if($return){
       redirect(new moodle_url('/mod/communityforum/view.php', array('id' => $cm->id)));
@@ -89,7 +89,7 @@ else if($delete){
       $button = new single_button($url,"Volver");
       echo html_writer::tag('div', $OUTPUT->render($button), array('style' => 'text-align:center'));  
     } 
-    */
+    
 }
 
 else if ($fromform = $mform->get_data()) {
@@ -127,7 +127,5 @@ else if ($fromform = $mform->get_data()) {
 else {
   $mform->display();
 }
-
-$PAGE->requires->js_call_amd('mod_communityforum/delete','init');
 echo $OUTPUT->footer($course);
 
