@@ -4401,6 +4401,7 @@ function communityforum_add_new_post($post, $mform, $unused = null) {
     $post->mailed     = COMMUNITYFORUM_MAILED_PENDING;
     $post->userid     = $USER->id;
     $post->attachment = "";
+    $post->bestanswer = 0;
     if (!isset($post->totalscore)) {
         $post->totalscore = 0;
     }
