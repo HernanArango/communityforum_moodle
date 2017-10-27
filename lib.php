@@ -4533,6 +4533,7 @@ function communityforum_add_discussion($discussion, $mform=null, $unused=null, $
     $post->forum         = $forum->id;     // speedup
     $post->course        = $forum->course; // speedup
     $post->mailnow       = $discussion->mailnow;
+    $post->bestanswer    = 0;
 
     $post->id = $DB->insert_record("communityforum_posts", $post);
 
