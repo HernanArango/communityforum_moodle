@@ -36,13 +36,8 @@ class Categories {
 
         $result = $DB->get_records_sql($sql, array($id_forum,$parent_category));
 
-        if ($result) {
+        return $result;
 
-            return $result;
-        }
-        else{
-            return false;
-        }
     }
 
 
@@ -56,13 +51,8 @@ class Categories {
 
         $result = $DB->count_records("communityforum_categories", ["parent_category" => $id_category]);
 
-        if ($result) {
-
-            return $result;
-        }
-        else{
-            return false;
-        }
+        return $result;
+        
     }
 
 

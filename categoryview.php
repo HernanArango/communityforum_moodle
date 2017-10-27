@@ -43,25 +43,11 @@ if (! $forum = $DB->get_record("communityforum", array("id" => $cm->instance))) 
 $categories = new Categories();
 $categorias = $categories->get($forum->id,$id_category);
 
-if(!$categories){
-	echo "No hay categorias";
+if(count($categorias) == 0){
+	echo "<h2>No existen categorías</h2>";
 }
 
-//echo $total_sub_categorias; die;
 
-	
-	/*foreach ($categorias as $categoria) {
-		$total_sub_categorias = $categories->count($categoria->id);
-
-		echo "<div class='category-communityforum'>";
-		echo "<i class='fa fa-plus-square' aria-hidden='true'></i>";
-		if($total_sub_categorias > 0 && $total_sub_categorias != 0)
-	 		echo "<a class='enlace' id='$id' parent='$categoria->id' href='#'>".$categoria->name_category."</a><br>";
-	 	else
-	 		echo "<a class='enlace' href='view.php?id=$id&category=$categoria->id'>".$categoria->name_category."</a><br>";
-
-	 	echo "</div>";
-	}*/
 
 	foreach ($categorias as $categoria) {
 		$total_sub_categorias = $categories->count($categoria->id);
@@ -88,7 +74,7 @@ if(!$categories){
 	 		echo "</div>";
 			echo "<div id='sub".$categoria->id."' class='subcategoria'></div>";	 	}
 
-	 	//echo "</div>";
+	 	
 	}
 
 	
