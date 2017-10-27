@@ -47,7 +47,7 @@ class Posts {
 		$last_post = $this->get_last($id_forum);
 		
 		if(!$last_post){
-			echo "<h2>No existen post</h2>";
+			echo "<h2>No existen discusiones</h2>";
 		}
 		else{
 			foreach ($last_post as $post) {
