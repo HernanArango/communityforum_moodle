@@ -233,8 +233,10 @@
 /*------------------------------------CATEGORIAS--------------------------------*/
     
     if(!$category){
+
         $posts = new Posts();
         
+
         $PAGE->requires->js_call_amd('mod_communityforum/categories','init',array($id));
         $PAGE->requires->js_call_amd('mod_communityforum/categories','loadCategories',array($id));
         echo "<div class='row-fluid'>";
@@ -262,5 +264,21 @@
             }
         echo '<br>';
     }
-    
+
+    echo "<div id='myModal' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+        <h3 id='myModalLabel'>¡Atención!</h3>
+      </div>
+      <div class='modal-body'>
+        <div id='alert-category'></div>
+        <div id='selector'></div>
+      </div>
+      <div class='modal-footer'>
+    <button id='eliminar' class='btn btn-primary'>Borrar</button>       
+    <button class='btn btn-default' data-dismiss='modal' aria-hidden='true'>Cancelar</button>
+      </div>
+    </div>";
+
+    $PAGE->requires->js_call_amd('mod_communityforum/categories','delete',array($id));
     echo $OUTPUT->footer($course);
