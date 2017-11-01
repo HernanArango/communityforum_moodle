@@ -255,8 +255,8 @@ $renderer = $PAGE->get_renderer('mod_communityforum');
 
 echo $OUTPUT->header();
 
-echo $OUTPUT->heading(format_string($forum->name), 2);
-echo $OUTPUT->heading(format_string($discussion->name), 3, 'discussionname');
+//echo $OUTPUT->heading(format_string($forum->name), 2);
+echo $OUTPUT->heading(format_string($discussion->name), 2, 'discussionname');
 
 // is_guest should be used here as this also checks whether the user is a guest in the current course.
 // Guests and visitors cannot subscribe - only enrolled users.
@@ -294,6 +294,8 @@ $neighbourlinks = $renderer->neighbouring_discussion_navigation($neighbours['pre
 echo $neighbourlinks;
 
 /// Print the controls across the top
+/*
+//DOCUMENTADO TEMPORALMENTE DANIEL GAVIRIA
 echo '<div class="discussioncontrols clearfix"><div class="controlscontainer m-b-1">';
 
 if (!empty($CFG->enableportfolios) && has_capability('mod/communityforum:exportdiscussion', $modcontext)) {
@@ -371,6 +373,7 @@ if (has_capability('mod/communityforum:pindiscussions', $modcontext)) {
 
 
 echo "</div></div>";
+*/
 
 if (communityforum_discussion_is_locked($forum, $discussion)) {
     echo html_writer::div(get_string('discussionlocked', 'communityforum'), 'discussionlocked');
