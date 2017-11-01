@@ -15,7 +15,7 @@ define(['jquery'], function($) {
 
         loadCategories: function(id){
         	
-        	$( "#categories" ).html("<div id='loader'></div>");
+        $("#categories").html("<div id='loader'></div>");
 		    $('#categories').on('click', '.enlace', function (){
 		    		
 		    		

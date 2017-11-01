@@ -398,6 +398,8 @@ communityforum_print_discussion($course, $cm, $forum, $discussion, $post, $displ
 echo $neighbourlinks;
 
 // Add the subscription toggle JS.
-$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
+//$PAGE->requires->yui_module('moodle-mod_communityforum-subscriptiontoggle', 'Y.M.mod_communityforum.subscriptiontoggle.init');
+$PAGE->requires->js_call_amd('mod_communityforum/likes','like');
+$PAGE->requires->js_call_amd('mod_communityforum/likes','dislike');
 
 echo $OUTPUT->footer();

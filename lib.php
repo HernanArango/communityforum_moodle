@@ -3170,6 +3170,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
                                                                                            'role' => 'header')); // Author.
         $output .= html_writer::end_tag('div');
         $output .= html_writer::end_tag('div'); // row
+
         $output .= html_writer::start_tag('div', array('class'=>'row'));
         $output .= html_writer::tag('div', '&nbsp;', array('class'=>'left side')); // Groups
         $output .= html_writer::tag('div', get_string('forumbodyhidden','forum'), array('class'=>'content')); // Content
@@ -3349,7 +3350,8 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     $output .= html_writer::start_div('forumpost clearfix' . $forumpostclass . $topicclass,
         ['role' => 'region', 'aria-label' => $discussionbyuser]);
     // Begin header row.
-    $output .= html_writer::start_div('row header clearfix');
+    $output .= html_writer::start_div('row header clearfix');  
+
 
     // User picture.
     if (!$authorhidden) {
@@ -3435,7 +3437,6 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     $output .= html_writer::end_tag('div'); // Content
     $output .= html_writer::end_tag('div'); // Content mask
     $output .= html_writer::end_tag('div'); // Row
-
     $output .= html_writer::start_tag('div', array('class'=>'row side'));
     $output .= html_writer::tag('div','&nbsp;', array('class'=>'left'));
     $output .= html_writer::start_tag('div', array('class'=>'options clearfix'));
@@ -3460,6 +3461,39 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
         }
     }
     $output .= html_writer::tag('div', implode('', $commandhtml), array('class'=>'commands'));
+
+
+    //------------------------LIKES---------------------------------------
+    require_once("./classes/likes/likes.php");
+    $like = new Likes();
+    $data = $like->get($post->id,$USER->id);
+    
+    
+    if(!$data){
+        $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+
+        $output.= "Dislike <i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+        
+    }
+    else{
+
+        if($data->likes == 1){
+            $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+
+            $output.= "Dislike<i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$User->id' like='0' aria-hidden='true'></i>";
+        }
+        elseif($data->likes == -1){
+            $output.= "Like<i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+
+            $output.= "Dislike<i  id='dislike$post->id' class='dislike like-selected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$User->id' like='0' aria-hidden='true'></i>";
+
+
+            
+        }
+
+    }
+
+    //---------------------------------------------------------------------
 
     // Output link to post if required
     if ($link) {
