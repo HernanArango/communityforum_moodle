@@ -431,3 +431,21 @@ span.unread {
 }
 
 
+.path-mod-communityforum .dislike{
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+    transform: rotate(180deg);
+
+}
+
+.path-mod-communityforum .like-selected{
+    color: #3785d1;
+
+}
+
+
+.path-mod-communityforum .like-unselected{
+    color: #999b9e;
+
+}
+
