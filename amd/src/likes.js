@@ -35,8 +35,8 @@ define(['jquery'], function($) {
 						
 						$.post( "likes.php",{"postid":postid, "userid": userid, "like":like}, function( data ) {
 		    		    	
-		              		console.log(data)
-		            	});
+							alert("entro")
+			            });
 	            });
 	        },
 
