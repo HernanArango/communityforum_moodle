@@ -67,10 +67,16 @@ class Likes {
 
     function update($id, $like_or_dislike){
         global $DB;
-        $record = new stdClass();
-        $record->id = $id;
-        $record->likes = $like_or_dislike;
-        $DB->update_record("communityforum_post_likes", $record, $bulk=false);
+        //si no tiene like or dislike (0) eliminamos de la bd en vez de actualizar a 0 para minimizar el tamaño de esta
+        if($like_or_dislike == 0){
+            $DB->delete_records("communityforum_post_likes", ["id" => $id]); 
+        }
+        else{
+            $record = new stdClass();
+            $record->id = $id;
+            $record->likes = $like_or_dislike;
+            $DB->update_record("communityforum_post_likes", $record, $bulk=false);
+        }
     }
 
 
