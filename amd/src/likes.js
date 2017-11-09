@@ -14,7 +14,9 @@ define(['jquery'], function($) {
 							$(this).removeClass('like-selected');
 			    			$(this).addClass('like-unselected');
 
-			    			like = $(this).attr('like',0);
+			    			$(this).attr('like',0);
+
+			    			like = 0;
 			    			
 						}
 						else{
@@ -22,7 +24,8 @@ define(['jquery'], function($) {
 							$(this).removeClass('like-unselected');
 			    			$(this).addClass('like-selected');
 
-			    			like = $(this).attr('like',1);
+			    			$(this).attr('like',1);
+			    			like = 1;
 						}
 
 						
@@ -35,9 +38,12 @@ define(['jquery'], function($) {
 						
 						$.post( "likes.php",{"postid":postid, "userid": userid, "like":like}, function( data ) {
 		    		    	
-							alert("entro")
+							
 			            });
-	            });
+			    });
+			            
+
+			           
 	        },
 
 	        dislike : function() {
@@ -52,7 +58,9 @@ define(['jquery'], function($) {
 							$(this).removeClass('like-selected');
 			    			$(this).addClass('like-unselected');
 
-			    			like = $(this).attr('like',0);
+			    			$(this).attr('like',0);
+
+			    			like = 0
 			    			
 						}
 						else{
@@ -60,7 +68,9 @@ define(['jquery'], function($) {
 							$(this).removeClass('like-unselected');
 			    			$(this).addClass('like-selected');
 
-			    			like = $(this).attr('like',1);
+			    			$(this).attr('like',1);
+
+			    			like = -1;
 						}
 
 						

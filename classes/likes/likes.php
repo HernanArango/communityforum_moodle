@@ -28,18 +28,29 @@ class Likes {
     function insert($post_id, $user_id,$like_or_dislike){
         global $DB;
 
-        
-        $record = new stdClass();
-        $record->userid = $user_id;
-        $record->postid = $post_id;
-        $record->likes = $like_or_dislike;
+        //si existe en la base de datos actualizamos
+        if($data = $this->get($post_id,$user_id)){
+
+            $this->update($data->id, $like_or_dislike);
+
+        }
+        //si no creamos
+        else{
+
+            $record = new stdClass();
+            $record->userid = $user_id;
+            $record->postid = $post_id;
+            $record->likes = $like_or_dislike;
+            
+
+            $lastinsertid = $DB->insert_record('communityforum_post_likes', $record);
+
+            return $lastinsertid;
+
+        }
         
 
-        $lastinsertid = $DB->insert_record('communityforum_post_likes', $record);
-
         
-
-        return $lastinsertid;
 
     }
 
@@ -51,6 +62,15 @@ class Likes {
 
         return $result;
 
+    }
+
+
+    function update($id, $like_or_dislike){
+        global $DB;
+        $record = new stdClass();
+        $record->id = $id;
+        $record->likes = $like_or_dislike;
+        $DB->update_record("communityforum_post_likes", $record, $bulk=false);
     }
 
 
