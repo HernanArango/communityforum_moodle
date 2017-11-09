@@ -3909,7 +3909,7 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
             echo '<td align="center" class="discussionsubscription">';
             echo communityforum_get_discussion_subscription_icon($forum, $post->discussion);
             echo "<i  id='like$post->id' class='fa fa-thumbs-o-up fa-2' aria-hidden='true'></i>";
-            echo $post->discussion; //Corregir con funcion
+            echo communityforum_get_count_likes($post->discussion);
             echo '</td>';
         }
     }
@@ -8295,8 +8295,15 @@ function communityforum_get_message_from_post($idpost){
 function communityforum_get_count_likes($iddiscuss){
     global $DB;
 
-    $sql="select message from {communityforum_posts} where id=?";
+    $sql="select sum(likes.likes) as sum from {communityforum_posts} as posts join {communityforum_post_likes} as likes on posts.id=likes.postid where posts.discussion=?";
     $params = array();
-    $params['id'] = $idpost;
+    $params['posts.discussion'] = $iddiscuss;
 
+    $result = $DB->get_records_sql($sql,$params);
+    $sum=0;
+    foreach ($result as $key => $obj) {
+        $sum = $obj->sum;
+    }
+
+    return $sum;
 }
