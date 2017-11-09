@@ -3469,7 +3469,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     $data = $like->get($post->id,$USER->id);
     
     
-    if(!$data){
+    if(!$data or $data->likes == 0){
         $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
 
         $output.= "Dislike <i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
@@ -3478,7 +3478,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     else{
 
         if($data->likes == 1){
-            $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+            $output.= "Like <i  id='like$post->id' class='like like-selected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='1' aria-hidden='true'></i>";
 
             $output.= "Dislike<i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
         }
