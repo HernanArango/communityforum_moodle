@@ -135,7 +135,7 @@
 
 
 /// Print settings and things across the top
-
+    
     // If it's a simple single discussion forum, we need to print the display
     // mode control.
     if ($forum->type == 'single') {

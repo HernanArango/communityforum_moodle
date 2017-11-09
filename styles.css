@@ -446,6 +446,19 @@ span.unread {
 
 .path-mod-communityforum .like-unselected{
     color: #999b9e;
-
 }
 
+.table-posts{
+    width: 50%;
+}
+
+.title-posts-table{
+    color: #808f8f;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.header-posts{
+    font-size: 18px;
+    font-weight: bold;
+}

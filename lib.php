@@ -3156,7 +3156,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
         $output .= html_writer::tag('a', '', array('id'=>'p'.$post->id));
         $output .= html_writer::start_tag('div', array('class'=>'forumpost clearfix',
                                                        'role' => 'region',
-                                                       'aria-label' => get_string('hiddenforumpost', 'forum')));
+                                                       'aria-label' => get_string('hiddenforumpost', 'communityforum')));
         $output .= html_writer::start_tag('div', array('class'=>'row header'));
         $output .= html_writer::tag('div', '', array('class'=>'left picture')); // Picture
         if ($post->parent) {
@@ -3164,16 +3164,16 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
         } else {
             $output .= html_writer::start_tag('div', array('class'=>'topic starter'));
         }
-        $output .= html_writer::tag('div', get_string('forumsubjecthidden','forum'), array('class' => 'subject',
+        $output .= html_writer::tag('div', get_string('forumsubjecthidden','communityforum'), array('class' => 'subject',
                                                                                            'role' => 'header')); // Subject.
-        $output .= html_writer::tag('div', get_string('forumauthorhidden', 'forum'), array('class' => 'author',
+        $output .= html_writer::tag('div', get_string('forumauthorhidden', 'communityforum'), array('class' => 'author',
                                                                                            'role' => 'header')); // Author.
         $output .= html_writer::end_tag('div');
         $output .= html_writer::end_tag('div'); // row
 
         $output .= html_writer::start_tag('div', array('class'=>'row'));
         $output .= html_writer::tag('div', '&nbsp;', array('class'=>'left side')); // Groups
-        $output .= html_writer::tag('div', get_string('forumbodyhidden','forum'), array('class'=>'content')); // Content
+        $output .= html_writer::tag('div', get_string('forumbodyhidden','communityforum'), array('class'=>'content')); // Content
         $output .= html_writer::end_tag('div'); // row
         $output .= html_writer::end_tag('div'); // forumpost
 
@@ -3186,15 +3186,15 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
 
     if (empty($str)) {
         $str = new stdClass;
-        $str->edit         = get_string('edit', 'forum');
-        $str->delete       = get_string('delete', 'forum');
-        $str->reply        = get_string('reply', 'forum');
-        $str->parent       = get_string('parent', 'forum');
-        $str->pruneheading = get_string('pruneheading', 'forum');
-        $str->prune        = get_string('prune', 'forum');
+        $str->edit         = get_string('edit', 'communityforum');
+        $str->delete       = get_string('delete', 'communityforum');
+        $str->reply        = get_string('reply', 'communityforum');
+        $str->parent       = get_string('parent', 'communityforum');
+        $str->pruneheading = get_string('pruneheading', 'communityforum');
+        $str->prune        = get_string('prune', 'communityforum');
         $str->displaymode     = get_user_preferences('communityforum_displaymode', $CFG->communityforum_displaymode);
-        $str->markread     = get_string('markread', 'forum');
-        $str->markunread   = get_string('markunread', 'forum');
+        $str->markread     = get_string('markread', 'communityforum');
+        $str->markunread   = get_string('markunread', 'communityforum');
     }
 
     $discussionlink = new moodle_url('/mod/communityforum/discuss.php', array('d'=>$post->discussion));
@@ -3232,7 +3232,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     // Add a permalink.
     $permalink = new moodle_url($discussionlink);
     $permalink->set_anchor('p' . $post->id);
-    $commands[] = array('url' => $permalink, 'text' => get_string('permalink', 'forum'));
+    $commands[] = array('url' => $permalink, 'text' => get_string('permalink', 'communityforum'));
 
     // SPECIAL CASE: The front page can display a news item post to non-logged in users.
     // Don't display the mark read / unread controls in this case.
@@ -3344,7 +3344,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     $postbyuser = new stdClass;
     $postbyuser->post = $post->subject;
     $postbyuser->user = $postuser->fullname;
-    $discussionbyuser = get_string('postbyuser', 'forum', $postbyuser);
+    $discussionbyuser = get_string('postbyuser', 'communityforum', $postbyuser);
     $output .= html_writer::tag('a', '', array('id'=>'p'.$post->id));
     // Begin forum post.
     $output .= html_writer::start_div('forumpost clearfix' . $forumpostclass . $topicclass,
@@ -3374,7 +3374,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
         $by = new stdClass();
         $by->date = userdate($post->modified);
         $by->name = html_writer::link($postuser->profilelink, $postuser->fullname);
-        $bytext = get_string('bynameondate', 'forum', $by);
+        $bytext = get_string('bynameondate', 'communityforum', $by);
     }
     $bytextoptions = [
         'role' => 'heading',
@@ -3415,7 +3415,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
         $postclass    = 'shortenedpost';
         $postcontent  = format_text($post->message, $post->messageformat, $options);
         $postcontent  = shorten_text($postcontent, $CFG->communityforum_shortpost);
-        $postcontent .= html_writer::link($discussionlink, get_string('readtherest', 'forum'));
+        $postcontent .= html_writer::link($discussionlink, get_string('readtherest', 'communityforum'));
         $postcontent .= html_writer::tag('div', '('.get_string('numwords', 'moodle', count_words($post->message)).')',
             array('class'=>'post-word-count'));
     } else {
@@ -3504,22 +3504,22 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
             $langstring = 'viewthediscussion';
         }
         if ($post->replies == 1) {
-            $replystring = get_string('repliesone', 'forum', $post->replies);
+            $replystring = get_string('repliesone', 'communityforum', $post->replies);
         } else {
-            $replystring = get_string('repliesmany', 'forum', $post->replies);
+            $replystring = get_string('repliesmany', 'communityforum', $post->replies);
         }
         if (!empty($discussion->unread) && $discussion->unread !== '-') {
             $replystring .= ' <span class="sep">/</span> <span class="unread">';
             if ($discussion->unread == 1) {
-                $replystring .= get_string('unreadpostsone', 'forum');
+                $replystring .= get_string('unreadpostsone', 'communityforum');
             } else {
-                $replystring .= get_string('unreadpostsnumber', 'forum', $discussion->unread);
+                $replystring .= get_string('unreadpostsnumber', 'communityforum', $discussion->unread);
             }
             $replystring .= '</span>';
         }
 
         $output .= html_writer::start_tag('div', array('class'=>'link'));
-        $output .= html_writer::link($discussionlink, get_string($langstring, 'forum'));
+        $output .= html_writer::link($discussionlink, get_string($langstring, 'communityforum'));
         $output .= '&nbsp;('.$replystring.')';
         $output .= html_writer::end_tag('div'); // link
     }
@@ -3623,9 +3623,9 @@ function communityforum_rating_validate($params) {
     // Fetch all the related records ... we need to do this anyway to call communityforum_user_can_see_post
     $post = $DB->get_record('communityforum_posts', array('id' => $params['itemid'], 'userid' => $params['rateduserid']), '*', MUST_EXIST);
     $discussion = $DB->get_record('communityforum_discussions', array('id' => $post->discussion), '*', MUST_EXIST);
-    $forum = $DB->get_record('forum', array('id' => $discussion->forum), '*', MUST_EXIST);
+    $forum = $DB->get_record('communityforum', array('id' => $discussion->forum), '*', MUST_EXIST);
     $course = $DB->get_record('course', array('id' => $forum->course), '*', MUST_EXIST);
-    $cm = get_coursemodule_from_instance('forum', $forum->id, $course->id , false, MUST_EXIST);
+    $cm = get_coursemodule_from_instance('communityforum', $forum->id, $course->id , false, MUST_EXIST);
     $context = context_module::instance($cm->id);
 
     // Make sure the context provided is the context of the forum
@@ -3721,9 +3721,9 @@ function mod_communityforum_rating_can_see_item_ratings($params) {
 
     $post = $DB->get_record('communityforum_posts', array('id' => $params['itemid']), '*', MUST_EXIST);
     $discussion = $DB->get_record('communityforum_discussions', array('id' => $post->discussion), '*', MUST_EXIST);
-    $forum = $DB->get_record('forum', array('id' => $discussion->forum), '*', MUST_EXIST);
+    $forum = $DB->get_record('communityforum', array('id' => $discussion->forum), '*', MUST_EXIST);
     $course = $DB->get_record('course', array('id' => $forum->course), '*', MUST_EXIST);
-    $cm = get_coursemodule_from_instance('forum', $forum->id, $course->id , false, MUST_EXIST);
+    $cm = get_coursemodule_from_instance('communityforum', $forum->id, $course->id , false, MUST_EXIST);
 
     // Perform some final capability checks.
     if (!communityforum_user_can_see_post($forum, $discussion, $post, $USER, $cm)) {
@@ -3753,13 +3753,13 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
                                         $cantrack = true, $forumtracked = true, $canviewparticipants = true, $modcontext = null,
                                         $canviewhiddentimedposts = false) {
 
-    global $COURSE, $USER, $CFG, $OUTPUT, $PAGE;
+    global $COURSE, $USER, $CFG, $OUTPUT, $PAGE, $DB;
 
     static $rowcount;
     static $strmarkalldread;
 
     if (empty($modcontext)) {
-        if (!$cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course)) {
+        if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course)) {
             print_error('invalidcoursemodule');
         }
         $modcontext = context_module::instance($cm->id);
@@ -3767,7 +3767,7 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
 
     if (!isset($rowcount)) {
         $rowcount = 0;
-        $strmarkalldread = get_string('markalldread', 'forum');
+        $strmarkalldread = get_string('markalldread', 'communityforum');
     } else {
         $rowcount = ($rowcount + 1) % 2;
     }
@@ -3787,36 +3787,54 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
     if (COMMUNITYFORUM_DISCUSSION_PINNED == $post->pinned) {
         $topicclass .= ' pinned';
     }
-    echo '<td class="'.$topicclass.'">';
+
+    // Picture and Username
+    $postuser = new stdClass();
+    $postuserfields = explode(',', user_picture::fields());
+    $postuser = username_load_fields_from_object($postuser, $post, null, $postuserfields);
+    $postuser->id = $post->userid;
+
+    echo '<td class="'.$topicclass.' table-posts">';
     if (COMMUNITYFORUM_DISCUSSION_PINNED == $post->pinned) {
-        echo $OUTPUT->pix_icon('i/pinned', get_string('discussionpinned', 'forum'), 'mod_communityforum');
+        echo $OUTPUT->pix_icon('i/pinned', get_string('discussionpinned', 'communityforum'), 'mod_communityforum');
     }
     $canalwaysseetimedpost = $USER->id == $post->userid || $canviewhiddentimedposts;
     if ($timeddiscussion && $canalwaysseetimedpost) {
         echo $PAGE->get_renderer('mod_communityforum')->timed_discussion_tooltip($post, empty($timedoutsidewindow));
     }
 
-    echo '<a href="'.$CFG->wwwroot.'/mod/communityforum/discuss.php?d='.$post->discussion.'">'.$post->subject.'</a>';
+    echo '<a class="title-posts-table" href="'.$CFG->wwwroot.'/mod/communityforum/discuss.php?d='.$post->discussion.'">'.$post->subject.'</a><br>';
+    $post_t = $DB->get_records('communityforum_posts', array('id'=>$post->id));
+    $message_post="";
+    foreach ($post_t as $post_r) {
+        $message_post=$post_r->message;
+        }
+    if (strlen($message_post) > 300){
+        $read_more="<strong><a href=".$CFG->wwwroot."/mod/communityforum/discuss.php?d=".$post->discussion.">".get_string('readmore','communityforum')."</a></strong>";
+        $cut_message=substr($message_post,0,280)."...".$read_more;
+        echo $cut_message;      
+    }
+    else{
+        echo $message_post;
+    };
+       
     echo "</td>\n";
 
-    // Picture
-    $postuser = new stdClass();
-    $postuserfields = explode(',', user_picture::fields());
-    $postuser = username_load_fields_from_object($postuser, $post, null, $postuserfields);
-    $postuser->id = $post->userid;
-    echo '<td class="picture">';
+    echo '<td align="center" class="picture">';
     echo $OUTPUT->user_picture($postuser, array('courseid'=>$forum->course));
-    echo "</td>\n";
+    $fullname = fullname($postuser, has_capability('moodle/site:viewfullnames', $modcontext));
+    echo '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$post->userid.'&amp;course='.$forum->course.'">'.$fullname.'</a>';
 
-    // User name
+    
+    /*Documentado para nueva CommunityForum
     $fullname = fullname($postuser, has_capability('moodle/site:viewfullnames', $modcontext));
     echo '<td class="author">';
     echo '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$post->userid.'&amp;course='.$forum->course.'">'.$fullname.'</a>';
-    echo "</td>\n";
+    echo "</td>\n";*/
 
     // Group picture
     if ($group !== -1) {  // Groups are active - group is a group data object or NULL
-        echo '<td class="picture group">';
+        echo '<td align="center" class="picture group">';
         if (!empty($group->picture) and empty($group->hidepicture)) {
             if ($canviewparticipants && $COURSE->groupmode) {
                 $picturelink = true;
@@ -3835,13 +3853,13 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
     }
 
     if (has_capability('mod/communityforum:viewdiscussion', $modcontext)) {   // Show the column with replies
-        echo '<td class="replies">';
+        echo '<td align="center" class="replies">';
         echo '<a href="'.$CFG->wwwroot.'/mod/communityforum/discuss.php?d='.$post->discussion.'">';
         echo $post->replies.'</a>';
         echo "</td>\n";
 
         if ($cantrack) {
-            echo '<td class="replies">';
+            echo '<td align="center" class="replies">';
             if ($forumtracked) {
                 if ($post->unread > 0) {
                     echo '<span class="unread">';
@@ -3865,7 +3883,7 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
             echo "</td>\n";
         }
     }
-
+    /* Documentado para Community
     echo '<td class="lastpost">';
     $usedate = (empty($post->timemodified)) ? $post->modified : $post->timemodified;  // Just in case
     $parenturl = '';
@@ -3882,15 +3900,17 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
 
     echo '<a href="'.$CFG->wwwroot.'/mod/communityforum/discuss.php?d='.$post->discussion.$parenturl.'">'.
           userdate($usedate, $datestring).'</a>';
-    echo "</td>\n";
+    echo "</td>\n";*/
 
     // is_guest should be used here as this also checks whether the user is a guest in the current course.
     // Guests and visitors cannot subscribe - only enrolled users.
     if ((!is_guest($modcontext, $USER) && isloggedin()) && has_capability('mod/communityforum:viewdiscussion', $modcontext)) {
         // Discussion subscription.
         if (\mod_communityforum\subscriptions::is_subscribable($forum)) {
-            echo '<td class="discussionsubscription">';
+            echo '<td align="center" class="discussionsubscription">';
             echo communityforum_get_discussion_subscription_icon($forum, $post->discussion);
+            echo "<i  id='like$post->id' class='fa fa-thumbs-o-up fa-2' aria-hidden='true'></i>";
+            echo communityforum_get_count_likes($post->discussion);
             echo '</td>';
         }
     }
@@ -3984,11 +4004,11 @@ function communityforum_print_mode_form($id, $mode, $forumtype='') {
     global $OUTPUT;
     if ($forumtype == 'single') {
         $select = new single_select(new moodle_url("/mod/communityforum/view.php", array('f'=>$id)), 'mode', communityforum_get_layout_modes(), $mode, null, "mode");
-        $select->set_label(get_string('displaymode', 'forum'), array('class' => 'accesshide'));
+        $select->set_label(get_string('displaymode', 'communityforum'), array('class' => 'accesshide'));
         $select->class = "forummode";
     } else {
         $select = new single_select(new moodle_url("/mod/communityforum/discuss.php", array('d'=>$id)), 'mode', communityforum_get_layout_modes(), $mode, null, "mode");
-        $select->set_label(get_string('displaymode', 'forum'), array('class' => 'accesshide'));
+        $select->set_label(get_string('displaymode', 'communityforum'), array('class' => 'accesshide'));
     }
     echo $OUTPUT->render($select);
 }
@@ -4058,8 +4078,8 @@ function communityforum_move_attachments($discussion, $forumfrom, $forumto) {
 
     $fs = get_file_storage();
 
-    $newcm = get_coursemodule_from_instance('forum', $forumto);
-    $oldcm = get_coursemodule_from_instance('forum', $forumfrom);
+    $newcm = get_coursemodule_from_instance('communityforum', $forumto);
+    $oldcm = get_coursemodule_from_instance('communityforum', $forumfrom);
 
     $newcontext = context_module::instance($newcm->id);
     $oldcontext = context_module::instance($oldcm->id);
@@ -4111,7 +4131,7 @@ function communityforum_print_attachments($post, $cm, $type) {
     if (!$context = context_module::instance($cm->id)) {
         return $type !== 'separateimages' ? '' : array('', '');
     }
-    $strattachment = get_string('attachment', 'forum');
+    $strattachment = get_string('attachment', 'communityforum');
 
     $fs = get_file_storage();
 
@@ -4277,7 +4297,7 @@ function communityforum_get_file_info($browser, $areas, $course, $cm, $context, 
 
     if (isset($cached['forum']) && $cached['forum']->id == $cm->instance) {
         $forum = $cached['forum'];
-    } else if ($forum = $DB->get_record('forum', array('id' => $cm->instance))) {
+    } else if ($forum = $DB->get_record('communityforum', array('id' => $cm->instance))) {
         $cached['forum'] = $forum;
     } else {
         return null;
@@ -4352,7 +4372,7 @@ function communityforum_pluginfile($course, $cm, $context, $filearea, $args, $fo
         return false;
     }
 
-    if (!$forum = $DB->get_record('forum', array('id'=>$cm->instance))) {
+    if (!$forum = $DB->get_record('communityforum', array('id'=>$cm->instance))) {
         return false;
     }
 
@@ -5023,7 +5043,7 @@ function communityforum_user_can_post_discussion($forum, $currentgroup=null, $un
 
     if (!$cm) {
         debugging('missing cm', DEBUG_DEVELOPER);
-        if (!$cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course)) {
+        if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course)) {
             print_error('invalidcoursemodule');
         }
     }
@@ -5109,7 +5129,7 @@ function communityforum_user_can_post($forum, $discussion, $user=NULL, $cm=NULL,
 
     if (!$cm) {
         debugging('missing cm', DEBUG_DEVELOPER);
-        if (!$cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course)) {
+        if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course)) {
             print_error('invalidcoursemodule');
         }
     }
@@ -5237,7 +5257,7 @@ function communityforum_user_can_see_discussion($forum, $discussion, $context, $
     // retrieve objects (yuk)
     if (is_numeric($forum)) {
         debugging('missing full forum', DEBUG_DEVELOPER);
-        if (!$forum = $DB->get_record('forum',array('id'=>$forum))) {
+        if (!$forum = $DB->get_record('communityforum',array('id'=>$forum))) {
             return false;
         }
     }
@@ -5247,7 +5267,7 @@ function communityforum_user_can_see_discussion($forum, $discussion, $context, $
             return false;
         }
     }
-    if (!$cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course)) {
+    if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course)) {
         print_error('invalidcoursemodule');
     }
 
@@ -5285,7 +5305,7 @@ function communityforum_user_can_see_post($forum, $discussion, $post, $user=NULL
     // retrieve objects (yuk)
     if (is_numeric($forum)) {
         debugging('missing full forum', DEBUG_DEVELOPER);
-        if (!$forum = $DB->get_record('forum',array('id'=>$forum))) {
+        if (!$forum = $DB->get_record('communityforum',array('id'=>$forum))) {
             return false;
         }
     }
@@ -5309,7 +5329,7 @@ function communityforum_user_can_see_post($forum, $discussion, $post, $user=NULL
 
     if (!$cm) {
         debugging('missing cm', DEBUG_DEVELOPER);
-        if (!$cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course)) {
+        if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course)) {
             print_error('invalidcoursemodule');
         }
     }
@@ -5375,7 +5395,7 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
     global $CFG, $USER, $OUTPUT;
 
     if (!$cm) {
-        if (!$cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course)) {
+        if (!$cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course)) {
             print_error('invalidcoursemodule');
         }
     }
@@ -5443,13 +5463,13 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
         switch ($forum->type) {
             case 'news':
             case 'blog':
-                $buttonadd = get_string('addanewtopic', 'forum');
+                $buttonadd = get_string('addanewtopic', 'communityforum');
                 break;
             case 'qanda':
-                $buttonadd = get_string('addanewquestion', 'forum');
+                $buttonadd = get_string('addanewquestion', 'communityforum');
                 break;
             default:
-                $buttonadd = get_string('addanewdiscussion', 'forum');
+                $buttonadd = get_string('addanewdiscussion', 'communityforum');
                 break;
         }
         $button = new single_button(new moodle_url('/mod/communityforum/post.php', ['forum' => $forum->id,'category' => $category]), $buttonadd, 'get');
@@ -5465,9 +5485,9 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
     } else if ($groupmode and !has_capability('moodle/site:accessallgroups', $context)) {
         // inform users why they can not post new discussion
         if (!$currentgroup) {
-            echo $OUTPUT->notification(get_string('cannotadddiscussionall', 'forum'));
+            echo $OUTPUT->notification(get_string('cannotadddiscussionall', 'communityforum'));
         } else if (!groups_is_member($currentgroup)) {
-            echo $OUTPUT->notification(get_string('cannotadddiscussion', 'forum'));
+            echo $OUTPUT->notification(get_string('cannotadddiscussion', 'communityforum'));
         }
     }
 
@@ -5478,11 +5498,11 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
     if (! $discussions = communityforum_get_discussions($cm, $category,$sort, $fullpost, null, $maxdiscussions, $getuserlastmodified, $page, $perpage) ) {
         echo '<div class="forumnodiscuss">';
         if ($forum->type == 'news') {
-            echo '('.get_string('nonews', 'forum').')';
+            echo '('.get_string('nonews', 'communityforum').')';
         } else if ($forum->type == 'qanda') {
-            echo '('.get_string('noquestions','forum').')';
+            echo '('.get_string('noquestions','communityforum').')';
         } else {
-            echo '('.get_string('nodiscussions', 'forum').')';
+            echo '('.get_string('nodiscussions', 'communityforum').')';
         }
         echo "</div>\n";
         return;
@@ -5527,35 +5547,38 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
     } else {
         $unreads = array();
     }
-
+    //Modificaciones realizadas para Community Forum
     if ($displayformat == 'header') {
         echo '<table cellspacing="0" class="">';//forumheaderlist
         echo '<thead>';
         echo '<tr>';
-        echo '<th class="header topic" scope="col">'.get_string('discussion', 'forum').'</th>';
-        echo '<th class="header author" colspan="2" scope="col">'.get_string('startedby', 'forum').'</th>';
+        echo '<th class="header topic header-posts" scope="col">'.get_string('discussion', 'communityforum').'</th>';
+        echo '<th class="header author header-posts" colspan="0" scope="col">'.get_string('startedby', 'communityforum').'</th>';
+        //echo '<th class="header author" colspan="2" scope="col">'.get_string('startedby', 'communityforum').'</th>';
+        /*
         if ($groupmode > 0) {
             echo '<th class="header group" scope="col">'.get_string('group').'</th>';
-        }
+        }*/
         if (has_capability('mod/communityforum:viewdiscussion', $context)) {
-            echo '<th class="header replies" scope="col">'.get_string('replies', 'forum').'</th>';
+            echo '<th class="header replies header-posts" scope="col">'.get_string('replies', 'communityforum').'</th>';
             // If the forum can be tracked, display the unread column.
             if ($cantrack) {
-                echo '<th class="header replies" scope="col">'.get_string('unread', 'forum');
+                echo '<th class="header replies header-posts" scope="col">'.get_string('unread', 'communityforum');
                 if ($forumtracked) {
-                    echo '<a title="'.get_string('markallread', 'forum').
+                    echo '<a title="'.get_string('markallread', 'communityforum').
                          '" href="'.$CFG->wwwroot.'/mod/communityforum/markposts.php?f='.
                          $forum->id.'&amp;mark=read&amp;returnpage=view.php&amp;sesskey=' . sesskey() . '">'.
-                         '<img src="'.$OUTPUT->pix_url('t/markasread') . '" class="iconsmall" alt="'.get_string('markallread', 'forum').'" /></a>';
+                         '<img src="'.$OUTPUT->pix_url('t/markasread') . '" class="iconsmall" alt="'.get_string('markallread', 'communityforum').'" /></a>';
                 }
                 echo '</th>';
             }
         }
-        echo '<th class="header lastpost" scope="col">'.get_string('lastpost', 'forum').'</th>';
+        //echo '<th class="header lastpost" scope="col">'.get_string('lastpost', 'communityforum').'</th>';
         if ((!is_guest($context, $USER) && isloggedin()) && has_capability('mod/communityforum:viewdiscussion', $context)) {
             if (\mod_communityforum\subscriptions::is_subscribable($forum)) {
-                echo '<th class="header discussionsubscription" scope="col">';
-                echo communityforum_get_discussion_subscription_icon_preloaders();
+                echo '<th class="header discussionsubscription header-posts" scope="col">'.get_string('settings_subscription', 'communityforum');
+
+                //echo communityforum_get_discussion_subscription_icon_preloaders();
                 echo '</th>';
             }
         }
@@ -6663,7 +6686,7 @@ function communityforum_tp_is_tracked($forum, $user=false) {
     // Work toward always passing an object...
     if (is_numeric($forum)) {
         debugging('Better use proper forum object.', DEBUG_DEVELOPER);
-        $forum = $DB->get_record('forum', array('id' => $forum));
+        $forum = $DB->get_record('communityforum', array('id' => $forum));
     }
 
     if (!communityforum_tp_can_track_forums($forum, $user)) {
@@ -6834,7 +6857,7 @@ function communityforum_check_throttling($forum, $cm = null) {
     global $CFG, $DB, $USER;
 
     if (is_numeric($forum)) {
-        $forum = $DB->get_record('forum', array('id' => $forum), '*', MUST_EXIST);
+        $forum = $DB->get_record('communityforum', array('id' => $forum), '*', MUST_EXIST);
     }
 
     if (!is_object($forum)) {
@@ -6842,7 +6865,7 @@ function communityforum_check_throttling($forum, $cm = null) {
     }
 
     if (!$cm) {
-        $cm = get_coursemodule_from_instance('forum', $forum->id, $forum->course, false, MUST_EXIST);
+        $cm = get_coursemodule_from_instance('communityforum', $forum->id, $forum->course, false, MUST_EXIST);
     }
 
     if (empty($forum->blockafter)) {
@@ -6956,7 +6979,7 @@ function communityforum_reset_userdata($data) {
     global $CFG, $DB;
     require_once($CFG->dirroot.'/rating/lib.php');
 
-    $componentstr = get_string('modulenameplural', 'forum');
+    $componentstr = get_string('modulenameplural', 'communityforum');
     $status = array();
 
     $params = array($data->courseid);
@@ -6965,13 +6988,13 @@ function communityforum_reset_userdata($data) {
     $typesql     = "";
     if (!empty($data->reset_communityforum_all)) {
         $removeposts = true;
-        $typesstr    = get_string('resetforumsall', 'forum');
+        $typesstr    = get_string('resetforumsall', 'communityforum');
         $types       = array();
     } else if (!empty($data->reset_communityforum_types)){
         $removeposts = true;
         $types       = array();
         $sqltypes    = array();
-        $communityforum_types_all = communityforum_get_communityforum_types_all();
+        $communityforum_types_all = communityforum_get_forum_types_all();
         foreach ($data->reset_communityforum_types as $type) {
             if (!array_key_exists($type, $communityforum_types_all)) {
                 continue;
@@ -7119,7 +7142,7 @@ function communityforum_reset_course_form_definition(&$mform) {
 
     $mform->addElement('checkbox', 'reset_communityforum_all', get_string('resetforumsall','forum'));
 
-    $mform->addElement('select', 'reset_communityforum_types', get_string('resetforums', 'forum'), communityforum_get_communityforum_types_all(), array('multiple' => 'multiple'));
+    $mform->addElement('select', 'reset_communityforum_types', get_string('resetforums', 'forum'), communityforum_get_forum_types_all(), array('multiple' => 'multiple'));
     $mform->setAdvanced('reset_communityforum_types');
     $mform->disabledIf('reset_communityforum_types', 'reset_communityforum_all', 'checked');
 
@@ -7151,10 +7174,10 @@ function communityforum_reset_course_form_defaults($course) {
  * @return array
  */
 function communityforum_get_layout_modes() {
-    return array (COMMUNITYFORUM_MODE_FLATOLDEST => get_string('modeflatoldestfirst', 'forum'),
-                  COMMUNITYFORUM_MODE_FLATNEWEST => get_string('modeflatnewestfirst', 'forum'),
-                  COMMUNITYFORUM_MODE_THREADED   => get_string('modethreaded', 'forum'),
-                  COMMUNITYFORUM_MODE_NESTED     => get_string('modenested', 'forum'));
+    return array (COMMUNITYFORUM_MODE_FLATOLDEST => get_string('modeflatoldestfirst', 'communityforum'),
+                  COMMUNITYFORUM_MODE_FLATNEWEST => get_string('modeflatnewestfirst', 'communityforum'),
+                  COMMUNITYFORUM_MODE_THREADED   => get_string('modethreaded', 'communityforum'),
+                  COMMUNITYFORUM_MODE_NESTED     => get_string('modenested', 'communityforum'));
 }
 
 /**
@@ -7163,11 +7186,11 @@ function communityforum_get_layout_modes() {
  * @return array
  */
 function communityforum_get_forum_types() {
-    return array ('general'  => get_string('generalforum', 'forum'),
-                  'eachuser' => get_string('eachuserforum', 'forum'),
-                  'single'   => get_string('singleforum', 'forum'),
-                  'qanda'    => get_string('qandaforum', 'forum'),
-                  'blog'     => get_string('blogforum', 'forum'));
+    return array ('general'  => get_string('generalforum', 'communityforum'),
+                  'eachuser' => get_string('eachuserforum', 'communityforum'),
+                  'single'   => get_string('singleforum', 'communityforum'),
+                  'qanda'    => get_string('qandaforum', 'communityforum'),
+                  'blog'     => get_string('blogforum', 'communityforum'));
 }
 
 /**
@@ -7176,13 +7199,13 @@ function communityforum_get_forum_types() {
  * @return array
  */
 function communityforum_get_forum_types_all() {
-    return array ('news'     => get_string('namenews','forum'),
-                  'social'   => get_string('namesocial','forum'),
-                  'general'  => get_string('generalforum', 'forum'),
-                  'eachuser' => get_string('eachuserforum', 'forum'),
-                  'single'   => get_string('singleforum', 'forum'),
-                  'qanda'    => get_string('qandaforum', 'forum'),
-                  'blog'     => get_string('blogforum', 'forum'));
+    return array ('news'     => get_string('namenews','communityforum'),
+                  'social'   => get_string('namesocial','communityforum'),
+                  'general'  => get_string('generalforum', 'communityforum'),
+                  'eachuser' => get_string('eachuserforum', 'communityforum'),
+                  'single'   => get_string('singleforum', 'communityforum'),
+                  'qanda'    => get_string('qandaforum', 'communityforum'),
+                  'blog'     => get_string('blogforum', 'communityforum'));
 }
 
 /**
@@ -8256,4 +8279,32 @@ function communityforum_delete_category($idCategory,$type){
     else{
         return false;
     }   
+}
+
+function communityforum_get_message_from_post($idpost){
+    global $DB;
+
+    $sql="select message from {communityforum_posts} where id=?";
+    $params = array();
+    $params['id'] = $idpost;
+
+    $result = $DB->execute($sql,$params);
+    print_r($result);
+    return $result;
+}
+
+function communityforum_get_count_likes($iddiscuss){
+    global $DB;
+
+    $sql="select sum(likes.likes) as sum from {communityforum_posts} as posts join {communityforum_post_likes} as likes on posts.id=likes.postid where posts.discussion=?";
+    $params = array();
+    $params['posts.discussion'] = $iddiscuss;
+
+    $result = $DB->get_records_sql($sql,$params);
+    $sum=0;
+    foreach ($result as $key => $obj) {
+        $sum = $obj->sum;
+    }
+
+    return $sum;
 }

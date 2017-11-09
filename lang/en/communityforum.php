@@ -564,4 +564,5 @@ $string['description_category'] = 'Description Category.';
 $string['error_delete_cateogry'] = 'An error occurred while trying to remove the category.';
 $string['error_edit_cateogry'] = 'An error occurred while trying to edit the category.';
 $string['add_category_correct'] = 'The category was successfully added.';
-
+$string['settings_subscription'] = 'Options';
+$string['readmore'] = 'read more';
