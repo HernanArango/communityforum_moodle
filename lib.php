@@ -25,6 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /** Include required files */
 require_once(__DIR__ . '/deprecatedlib.php');
+require_once("./classes/likes/likes.php");
 require_once($CFG->libdir.'/filelib.php');
 require_once($CFG->libdir.'/eventslib.php');
 
@@ -3464,7 +3465,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
 
 
     //------------------------LIKES---------------------------------------
-    require_once("./classes/likes/likes.php");
+    
     $like = new Likes();
 
     $data = $like->get($post->id,$USER->id);
@@ -3913,12 +3914,13 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
         if (\mod_communityforum\subscriptions::is_subscribable($forum)) {
             echo '<td align="center" class="discussionsubscription">';
             echo communityforum_get_discussion_subscription_icon($forum, $post->discussion);
-            $likes=communityforum_get_count_likes($post->discussion);
+            $like = new Likes();
+            $likes=$like->sum_post($post->id);
             if($likes >=0){
                 echo "<i  id='like$post->id' class='fa fa-thumbs-o-up fa-2' aria-hidden='true'></i>";
             }
             else{
-                echo "<i  id='like$post->id' class='fa fa-thumbs-o-down fa-2' aria-hidden='true'></i>";
+                echo "   <i  id='like$post->id' class='fa fa-thumbs-o-down fa-2' aria-hidden='true'></i>";
             }
             echo " <strong>".$likes."</strong>";
         }
@@ -5562,14 +5564,14 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
         echo '<thead>';
         echo '<tr>';
         echo '<th class="header topic header-posts" scope="col">'.get_string('discussion', 'communityforum').'</th>';
-        echo '<th class="header author header-posts" colspan="0" scope="col">'.get_string('startedby', 'communityforum').'</th>';
+        echo '<th class="header author header-posts header-started" colspan="0" scope="col">'.get_string('startedby', 'communityforum').'</th>';
         //echo '<th class="header author" colspan="2" scope="col">'.get_string('startedby', 'communityforum').'</th>';
         /*
         if ($groupmode > 0) {
             echo '<th class="header group" scope="col">'.get_string('group').'</th>';
         }*/
         if (has_capability('mod/communityforum:viewdiscussion', $context)) {
-            echo '<th class="header replies header-posts" scope="col">'.get_string('replies', 'communityforum').'</th>';
+            echo '<th class="header replies header-posts header-min" scope="col">'.get_string('replies', 'communityforum').'</th>';
             // If the forum can be tracked, display the unread column.
             if ($cantrack) {
                 echo '<th class="header replies header-posts" scope="col">'.get_string('unread', 'communityforum');
@@ -5585,9 +5587,7 @@ function communityforum_print_latest_discussions($course, $forum, $category,$max
         //echo '<th class="header lastpost" scope="col">'.get_string('lastpost', 'communityforum').'</th>';
         if ((!is_guest($context, $USER) && isloggedin()) && has_capability('mod/communityforum:viewdiscussion', $context)) {
             if (\mod_communityforum\subscriptions::is_subscribable($forum)) {
-                echo '<th class="header discussionsubscription header-posts" scope="col">'.get_string('settings_subscription', 'communityforum');
-
-                //echo communityforum_get_discussion_subscription_icon_preloaders();
+                echo '<th align="center" class="header discussionsubscription header-posts header-min" scope="col">'.get_string('settings_subscription', 'communityforum');echo communityforum_get_discussion_subscription_icon_preloaders();
                 echo '</th>';
             }
         }

@@ -87,23 +87,8 @@ class Likes {
     function sum_post($post_id){
         global $DB;
 
-        //$result = $DB->execute("select sum(id) from {communityforum_post_likes} where postid=?", ["postid" = $post_id]);
-
-        //$result = $DB->get_recordset_select("communityforum_post_likes", "id,like", ["postid" => $post_id]);
-        //
-
-        //print_r($result);
-        //$result = $DB->count_records("select sum(id) from communityforum_post_likes where postid=?", ["postid" => $post_id]);
-        $result = $DB->get_recordset_sql("select sum(id) as total from {communityforum_post_likes}", ["postid" => $post_id], $limitfrom=0, $limitnum=0);
-
         $result = $DB->get_record('communityforum_post_likes',["postid" => $post_id],'sum(likes) as total');
         
         return $result->total;
     }
-
-
-
-
-
-
 }
