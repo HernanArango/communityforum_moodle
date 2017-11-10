@@ -3913,9 +3913,14 @@ function communityforum_print_discussion_header(&$post, $forum, $group = -1, $da
         if (\mod_communityforum\subscriptions::is_subscribable($forum)) {
             echo '<td align="center" class="discussionsubscription">';
             echo communityforum_get_discussion_subscription_icon($forum, $post->discussion);
-            echo "<i  id='like$post->id' class='fa fa-thumbs-o-up fa-2' aria-hidden='true'></i>";
-            echo communityforum_get_count_likes($post->discussion);
-            echo '</td>';
+            $likes=communityforum_get_count_likes($post->discussion);
+            if($likes >=0){
+                echo "<i  id='like$post->id' class='fa fa-thumbs-o-up fa-2' aria-hidden='true'></i>";
+            }
+            else{
+                echo "<i  id='like$post->id' class='fa fa-thumbs-o-down fa-2' aria-hidden='true'></i>";
+            }
+            echo " <strong>".$likes."</strong>";
         }
     }
 
@@ -8297,6 +8302,14 @@ function communityforum_get_message_from_post($idpost){
     return $result;
 }
 
+
+/**
+ * Suma la cantidad de likes que tenga la discusión.
+ *
+ * @param  int $iddiscuss identificador de la discusión
+ * @return Sumatoria de los likes que tenga dicha discusión
+ * @since Moodle 3.2
+ */
 function communityforum_get_count_likes($iddiscuss){
     global $DB;
 
