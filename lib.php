@@ -3466,32 +3466,37 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     //------------------------LIKES---------------------------------------
     require_once("./classes/likes/likes.php");
     $like = new Likes();
+
     $data = $like->get($post->id,$USER->id);
     
-    
-    if(!$data or $data->likes == 0){
-        $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+    if(isloggedin()){
+        if(!$data or $data->likes == 0){
+            $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
 
-        $output.= "Dislike <i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
-        
-    }
-    else{
-
-        if($data->likes == 1){
-            $output.= "Like <i  id='like$post->id' class='like like-selected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='1' aria-hidden='true'></i>";
-
-            $output.= "Dislike<i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
-        }
-        elseif($data->likes == -1){
-            $output.= "Like<i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
-
-            $output.= "Dislike<i  id='dislike$post->id' class='dislike like-selected fa fa-thumbs-o-up fa-2' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
-
-
+            $output.= "Dislike <i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
             
         }
+        else{
 
+            if($data->likes == 1){
+                $output.= "Like <i  id='like$post->id' class='like like-selected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='1' aria-hidden='true'></i>";
+
+                $output.= "Dislike<i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+            }
+            elseif($data->likes == -1){
+                $output.= "Like<i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+
+                $output.= "Dislike<i  id='dislike$post->id' class='dislike like-selected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+
+
+                
+            }
+
+        }
     }
+    $puntuacion_post= $like->sum_post($post->id);
+
+    //$output.="puntuación  ".$puntuacion_post;
 
     //---------------------------------------------------------------------
 
@@ -5166,10 +5171,10 @@ function communityforum_user_can_post($forum, $discussion, $user=NULL, $cm=NULL,
     } else {
         $capname = 'mod/communityforum:replypost';
     }
-
-    if (!has_capability($capname, $context, $user->id)) {
+    //todos los usuarios pueden hacer reply excepto los invitados que se restringen mas arriba
+    /*if (!has_capability($capname, $context, $user->id)) {
         return false;
-    }
+    }*/
 
     if (!$groupmode = groups_get_activity_groupmode($cm, $course)) {
         return true;

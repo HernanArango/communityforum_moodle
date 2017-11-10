@@ -277,6 +277,7 @@ if ((!is_guest($modcontext, $USER) && isloggedin()) && has_capability('mod/commu
 /// Also, if we know they should be able to reply, then explicitly set $canreply for performance reasons
 
 $canreply = communityforum_user_can_post($forum, $discussion, $USER, $cm, $course, $modcontext);
+
 if (!$canreply and $forum->type !== 'news') {
     if (isguestuser() or !isloggedin()) {
         $canreply = true;
