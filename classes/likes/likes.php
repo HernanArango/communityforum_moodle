@@ -54,7 +54,10 @@ class Likes {
 
     }
 
-
+    /**
+    *get obtiene los like de un usuario en un determinado post
+    *
+    */
     function get($post_id, $user_id){
         global $DB;
 
