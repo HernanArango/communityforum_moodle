@@ -3466,6 +3466,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     //------------------------LIKES---------------------------------------
     require_once("./classes/likes/likes.php");
     $like = new Likes();
+
     $data = $like->get($post->id,$USER->id);
     
     if(isloggedin()){
@@ -3493,6 +3494,9 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
 
         }
     }
+    $puntuacion_post= $like->sum_post($post->id);
+
+    //$output.="puntuación  ".$puntuacion_post;
 
     //---------------------------------------------------------------------
 
