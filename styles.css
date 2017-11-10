@@ -324,7 +324,7 @@ span.unread {
 
 .path-mod-communityforum .discussionsubscription {
     margin-top: -10px;
-    text-align: right;
+    /*text-align: right;*/
     margin-bottom: 10px;
 }
 
@@ -459,6 +459,14 @@ span.unread {
 }
 
 .header-posts{
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
+}
+
+.header-min{
+    width: 10%;
+}
+
+.header-started{
+    width: 20%;
 }
