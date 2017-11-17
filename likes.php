@@ -21,13 +21,13 @@ require_once('../../config.php');
 require_once("./classes/likes/likes.php");
 
 
-$id_user = optional_param('userid', 0, PARAM_INT);
+//$id_user = optional_param('userid', 0, PARAM_INT);
 $id_post = optional_param('postid', 0, PARAM_INT);
 $like_or_dislike = optional_param('like', 0, PARAM_INT);
 
 $like = new Likes();
 
-$like->insert($id_post,$id_user,$like_or_dislike);
+$like->insert($id_post,$USER->id,$like_or_dislike);
 
 
 

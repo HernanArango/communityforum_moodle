@@ -18,8 +18,7 @@
 
 
 defined('MOODLE_INTERNAL') || die();
-require_once('lib.php');
-
+//require_once('lib.php');
 
 
 class Likes {

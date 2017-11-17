@@ -5,7 +5,6 @@ define(['jquery'], function($) {
 	        like : function() {
 				$('.forumpost').on('click','.like',function(){
 						postid = $(this).attr('postid');
-						userid = $(this).attr('userid');
 						like = $(this).attr('like');
 
 
@@ -36,7 +35,7 @@ define(['jquery'], function($) {
 		    			$('#dislike'+postid).attr('like',0);
 
 						
-						$.post( "likes.php",{"postid":postid, "userid": userid, "like":like}, function( data ) {
+						$.post( "likes.php",{"postid":postid, "like":like}, function( data ) {
 		    		    	
 							
 			            });
@@ -49,7 +48,6 @@ define(['jquery'], function($) {
 	        dislike : function() {
 				$('.forumpost').on('click','.dislike',function(){
 						postid = $(this).attr('postid');
-						userid = $(this).attr('userid');
 						like = $(this).attr('like');
 
 						
@@ -81,7 +79,7 @@ define(['jquery'], function($) {
 		    			$('#like'+postid).attr('like',0);
 
 						
-						$.post( "likes.php",{"postid":postid, "userid": userid, "like":like}, function( data ) {
+						$.post( "likes.php",{"postid":postid, "like":like}, function( data ) {
 		    		    	
 		              		console.log(data)
 		            	});

@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /** Include required files */
 require_once(__DIR__ . '/deprecatedlib.php');
-require_once("./classes/likes/likes.php");
+require_once(__DIR__ ."/classes/likes/likes.php");
 require_once($CFG->libdir.'/filelib.php');
 require_once($CFG->libdir.'/eventslib.php');
 
@@ -3472,22 +3472,22 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
     
     if(isloggedin()){
         if(!$data or $data->likes == 0){
-            $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+            $output.= "Like <i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id'  like='0' aria-hidden='true'></i>";
 
-            $output.= "Dislike <i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+            $output.= "Dislike <i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id'  like='0' aria-hidden='true'></i>";
             
         }
         else{
 
             if($data->likes == 1){
-                $output.= "Like <i  id='like$post->id' class='like like-selected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='1' aria-hidden='true'></i>";
+                $output.= "Like <i  id='like$post->id' class='like like-selected fa fa-thumbs-o-up fa-2x' postid='$post->id'  like='1' aria-hidden='true'></i>";
 
-                $output.= "Dislike<i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+                $output.= "Dislike<i  id='dislike$post->id' class='dislike like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id'  like='0' aria-hidden='true'></i>";
             }
             elseif($data->likes == -1){
-                $output.= "Like<i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+                $output.= "Like<i  id='like$post->id' class='like like-unselected fa fa-thumbs-o-up fa-2x' postid='$post->id'  like='0' aria-hidden='true'></i>";
 
-                $output.= "Dislike<i  id='dislike$post->id' class='dislike like-selected fa fa-thumbs-o-up fa-2x' postid='$post->id' userid='$USER->id' like='0' aria-hidden='true'></i>";
+                $output.= "Dislike<i  id='dislike$post->id' class='dislike like-selected fa fa-thumbs-o-up fa-2x' postid='$post->id'  like='0' aria-hidden='true'></i>";
 
 
                 
@@ -3495,7 +3495,7 @@ function communityforum_print_post($post, $discussion, $forum, &$cm, $course, $o
 
         }
     }
-    $puntuacion_post= $like->sum_post($post->id);
+    //$puntuacion_post= $like->sum_post($post->id);
 
     //$output.="puntuación  ".$puntuacion_post;
 
